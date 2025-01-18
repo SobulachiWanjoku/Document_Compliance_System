@@ -1,37 +1,111 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    padding: 20px;
-    background-color: #f4f4f4;
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-h1, h2, h3 {
+body {
+    font-family: 'Arial', sans-serif;
     color: #333;
+    background: linear-gradient(to bottom, #005c97, #363795);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero {
+    text-align: center;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 800px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-section {
+    margin-top: 1.5rem;
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+label {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+input[type="file"] {
+    padding: 0.5rem;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: #f76c6c;
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #f54d4d;
+}
+
+.hero-buttons {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.hero-buttons .btn-secondary {
+    background: #fff;
+    color: #005c97;
+    border: 2px solid #fff;
+}
+
+.hero-buttons .btn-secondary:hover {
+    background: #e5e5e5;
+    color: #363795;
+    border-color: #363795;
 }
 
 ul {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
+    margin-top: 1.5rem;
 }
 
-li {
-    background: #fff;
-    margin: 5px 0;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-a {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 15px;
-    background: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-a:hover {
-    background: #0056b3;
+ul li {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
 }
