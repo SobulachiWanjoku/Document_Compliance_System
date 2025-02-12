@@ -1,21 +1,24 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from utils import check_compliance  # Import the updated check_compliance function
+from werkzeug.utils import secure_filename  # Import secure_filename for safe file handling
+
 from models import db, Template  # Import db and Template from models
-import os
+
 
 app = Flask(__name__)
+app.secret_key = 'SobulachiWanjoku'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///templates.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'uploads'
-app.secret_key = 'your_secret_key'
+app.config['ALLOWED_EXTENSIONS'] = {'pdf', 'docx'}
+db.init_app(app)  # Initialize the SQLAlchemy instance with the Flask app
 
 # Initialize Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-# Initialize the database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/USER/Documents/Document_Compliance_System/instance/templates.db'  # Updated with absolute path
-db.init_app(app)
 
 # Redirect root URL to login page
 @app.route('/')
@@ -27,28 +30,54 @@ users = {
     "admin": generate_password_hash("password123")
 }
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload_file():
     if request.method == 'POST':
+        if 'template' not in request.files or 'student_file' not in request.files:
+            return {"error": "No file part in the request"}, 400
+
         template_file = request.files['template']
         student_file = request.files['student_file']
 
+        if template_file.filename == '' or student_file.filename == '':
+            return {"error": "No selected file"}, 400
+
+        if not allowed_file(template_file.filename) or not allowed_file(student_file.filename):
+            return {"error": "Invalid file type. Only PDF and DOCX files are allowed."}, 400
+
+
         if template_file and student_file:
-            template_path = os.path.join(app.config['UPLOAD_FOLDER'], template_file.filename)
-            student_path = os.path.join(app.config['UPLOAD_FOLDER'], student_file.filename)
+            try:
+                # Sanitize file names
+                template_filename = secure_filename(template_file.filename)
+                student_filename = secure_filename(student_file.filename)
 
-            template_file.save(template_path)
-            student_file.save(student_path)
+                # Save the template to the database
+                new_template = Template(name=template_filename, content=template_file.read())
+                db.session.add(new_template)
+                db.session.commit()
 
-            # Load the template content
-            template_content = load_template_content()  # Function to load template content
+                # Save the student file temporarily
+                student_path = os.path.join(app.config['UPLOAD_FOLDER'], student_filename)
+                student_file.save(student_path)
 
-            # Check compliance and get the score
-            compliance_score, recommendations = check_compliance(template_content, student_path)
+                # Retrieve the latest template for compliance checking
+                template = Template.query.order_by(Template.id.desc()).first()
 
-            # Process the results
-            return render_template('result.html', score=compliance_score, recommendations=recommendations)
+                # Check if template content is empty
+                if not template.content:
+                    return {"error": "Template content is empty. Please upload a valid template."}, 400
+
+                compliance_score, recommendations = check_compliance(template.content, student_path)
+
+                return render_template('result.html', score=compliance_score, recommendations=recommendations)
+
+            except Exception as e:
+                return {"error": f"An error occurred: {str(e)}"}, 500
 
     return render_template('upload.html')
 
@@ -102,8 +131,6 @@ def delete_template(template_id):
         flash("Template not found.")
     return redirect(url_for('gallery'))
 
-@app.route('/logout')
-@login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
