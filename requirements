@@ -3,3 +3,5 @@ Flask-WTF
 pytesseract
 opencv-python
 numpy
+scikit-learn
+joblib

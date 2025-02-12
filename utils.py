@@ -3,6 +3,13 @@ import pytesseract
 import numpy as np
 from docx import Document
 import os
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import joblib  # For loading the pre-trained model
+
+# Load the pre-trained model (ensure the model file is available)
+model = joblib.load('saved_models/compliance_model.pkl')  # Updated model path
+vectorizer = joblib.load('saved_models/vectorizer.pkl')  # Load the vectorizer
 
 def check_compliance(template_content, student_path):
     # Determine the file type based on the file extension
@@ -29,18 +36,17 @@ def check_compliance(template_content, student_path):
     else:
         template_text = template_content
 
-    # Simple compliance check (you can enhance this logic)
+    # Calculate compliance score using the machine learning model
     compliance_score = calculate_compliance_score(template_text, student_text)
     recommendations = generate_recommendations(template_text, student_text)
 
     return compliance_score, recommendations
 
 def calculate_compliance_score(template_text, student_text):
-    # Basic score calculation (you can enhance this logic)
-    if template_text.strip() == student_text.strip():
-        return 100
-    else:
-        return 50  # Placeholder score
+    # Use TF-IDF Vectorization and Cosine Similarity for scoring
+    tfidf_matrix = vectorizer.transform([template_text, student_text])
+    similarity = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])
+    return similarity[0][0] * 100  # Scale to percentage
 
 def generate_recommendations(template_text, student_text):
     # Placeholder for recommendations logic
