@@ -79,7 +79,11 @@ def upload_file():
                     flash('Template content is empty. Please upload a valid template.', 'error')
                     return redirect(url_for('upload_file'))
 
-                compliance_score, recommendations = check_compliance(template.content, student_path)
+                try:
+                    compliance_score, recommendations = check_compliance(template.content, student_path)
+                except Exception as e:
+                    return {"error": f"Compliance check failed: {str(e)}"}, 500
+
                 print(f"Compliance Score: {compliance_score}, Recommendations: {recommendations}")  # Debug statement
 
                 return render_template('result.html',score=compliance_score,recommendations=recommendations)
