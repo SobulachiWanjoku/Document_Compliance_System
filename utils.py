@@ -17,7 +17,6 @@ nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
-
 # Load the pre-trained model and vectorizer
 try:
     try:
@@ -29,11 +28,7 @@ try:
 except Exception as e:
     raise ImportError(f"Failed to load model files: {str(e)}")
 
-
-
 def check_compliance(template_text, student_path):
-    """Check document compliance and generate recommendations"""
-
     """Check document compliance and generate recommendations"""
     try:
         # Determine the file type based on the file extension
@@ -46,10 +41,19 @@ def check_compliance(template_text, student_path):
         else:
             # Handle image file
             student_img = cv2.imread(student_path)
-            if student_img is None:
-                raise ValueError(f"Failed to load student file at path: {student_path}")
+
+        if student_img is None and (file_extension == '.jpg' or file_extension == '.jpeg'):
+            raise ValueError(f"Failed to load student image at path: {student_path}")
+        elif student_img is None:
+            raise ValueError(f"Unsupported file type or failed to load student file at path: {student_path}")
+
+        if student_img is not None:
             student_gray = cv2.cvtColor(student_img, cv2.COLOR_BGR2GRAY)
-            student_text = pytesseract.image_to_string(student_gray)
+            student_text = pytesseract.image_to_string(student_gray).strip()
+
+        # Ensure student_text is a string
+        if isinstance(student_text, bytes):
+            student_text = student_text.decode('utf-8')
 
         # Preprocess texts
         template_text = preprocess_text(template_text)
@@ -67,7 +71,6 @@ def check_compliance(template_text, student_path):
 
     except Exception as e:
         raise ValueError(f"Compliance check failed: {str(e)}")
-
 
 def generate_recommendations(template_text, student_text):
     """Generate specific recommendations based on text comparison"""

@@ -8,31 +8,29 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
-from sklearn.utils.class_weight import compute_class_weight
-import nltk 
-nltk.download('punkt_tab')
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-from nltk.stem import WordNetLemmatizer
-
+import nltk
 
 # Ensure necessary NLTK resources are available
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+
 # Sample dataset (Consider expanding this for better performance)
 data = [
-    ("Template text 1", "Student submission 1", 1),
-    ("Template text 2", "Student submission 2", 0),
-    ("Template text 3", "Student submission 3", 1),
-    ("Template text 4", "Student submission 4", 0),
-    ("Template text 5", "Student submission 5", 1),
-    ("Template text 6", "Student submission 6", 0),
-    ("Template text 11", "Student submission 11", 1),
-    ("Template text 12", "Student submission 12", 0),
-    ("Template text 13", "Student submission 13", 1),
-    ("Template text 14", "Student submission 14", 0)
+    ("This is the official template", "This is the official template", 1),
+    ("This is the official template", "This is a different document", 0),
+    ("The report should include findings", "The report includes all findings", 1),
+    ("The report should include findings", "Introduction and references only", 0),
+    ("Ensure all sections are covered", "All sections are covered as required", 1),
+    ("Ensure all sections are covered", "The conclusion is missing", 0),
+    ("Include references in APA format", "References are formatted correctly", 1),
+    ("Include references in APA format", "No references included", 0),
+    ("Methods must be described", "Methods are clearly described", 1),
+    ("Methods must be described", "Only results are mentioned", 0)
 ]
 
 # Text preprocessing function
@@ -40,12 +38,18 @@ def preprocess_text(text):
     text = text.lower()
     text = re.sub(r'[^a-zA-Z0-9]', ' ', text)  # Remove special characters
     tokens = word_tokenize(text)
-    tokens = [word for word in tokens if word not in stopwords.words('english')]
+    
+    # Ensure stopwords are downloaded before use
+    stop_words = set(stopwords.words('english'))
+    tokens = [word for word in tokens if word not in stop_words]
+    
     lemmatizer = WordNetLemmatizer()
     tokens = [lemmatizer.lemmatize(word) for word in tokens]
+    
     return ' '.join(tokens)
 
-# Extract student texts and labels
+# Extract template, student texts, and labels
+template_texts = [preprocess_text(item[0]) for item in data]
 student_texts = [preprocess_text(item[1]) for item in data]
 y = np.array([item[2] for item in data])
 
@@ -54,7 +58,7 @@ print("Label distribution before split:", Counter(y))
 
 # Feature extraction and model pipeline
 pipeline = Pipeline([
-    ('vectorizer', TfidfVectorizer()),
+    ('vectorizer', TfidfVectorizer()),  # TF-IDF for feature extraction
     ('classifier', LogisticRegression(class_weight='balanced', C=1.0, solver='liblinear'))
 ])
 

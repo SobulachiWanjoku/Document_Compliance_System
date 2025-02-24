@@ -2,9 +2,9 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from utils import check_compliance
-from werkzeug.utils import secure_filename
-from models import db, Template
+from utils import check_compliance  # Import the updated check_compliance function
+from werkzeug.utils import secure_filename # Import secure_filename for safe file handling
+from models import db, Template # Import db and Template from models
 
 app = Flask(__name__)
 app.secret_key = 'SobulachiWanjoku'
@@ -36,33 +36,45 @@ def upload_file():
     """Handle file upload and compliance checking"""
     if request.method == 'POST':
         if 'template' not in request.files or 'student_file' not in request.files:
-            flash('No file part in the request', 'error')
+            return {"error": "No file part in the request"}, 400
             return redirect(url_for('upload_file'))
 
         template_file = request.files['template']
         student_file = request.files['student_file']
 
         if template_file.filename == '' or student_file.filename == '':
-            flash('No file selected', 'error')
+            return {"error": "No selected file"}, 400
             return redirect(url_for('upload_file'))
 
         if not allowed_file(template_file.filename) or not allowed_file(student_file.filename):
-            flash('Invalid file type. Only PDF and DOCX files are allowed.', 'error')
+            return {"error": "Invalid file type. Only PDF and DOCX files are allowed."}, 400
             return redirect(url_for('upload_file'))
 
-        if template_file and student_file:
+        if template_file and student_file and allowed_file(student_file.filename):
+
             try:
+                 # Sanitize file names
                 template_filename = secure_filename(template_file.filename)
                 student_filename = secure_filename(student_file.filename)
 
+                # Save the template to the database
                 new_template = Template(name=template_filename, content=template_file.read())
                 db.session.add(new_template)
                 db.session.commit()
 
+                # Check if the student file is an image or DOCX
                 student_path = os.path.join(app.config['UPLOAD_FOLDER'], student_filename)
                 student_file.save(student_path)
 
+                # Ensure the file is processed correctly
+                if not allowed_file(student_file.filename):
+                    return {"error": "Invalid file type. Only PDF and DOCX files are allowed."}, 400
+
+
+                # Retrieve the latest template for compliance checking
                 template = Template.query.order_by(Template.id.desc()).first()
+
+                # Check if template content is empty
                 if not template.content:
                     flash('Template content is empty. Please upload a valid template.', 'error')
                     return redirect(url_for('upload_file'))
@@ -70,15 +82,18 @@ def upload_file():
                 compliance_score, recommendations = check_compliance(template.content, student_path)
                 print(f"Compliance Score: {compliance_score}, Recommendations: {recommendations}")  # Debug statement
 
-                return render_template('result.html', 
-                                   score=compliance_score, 
-                                   recommendations=recommendations)
+                return render_template('result.html',score=compliance_score,recommendations=recommendations)
 
             except Exception as e:
-                flash(f'An error occurred: {str(e)}', 'error')
+                return {"error": f"An error occurred: {str(e)}"}, 500
                 return redirect(url_for('upload_file'))
 
     return render_template('upload.html')
+
+def load_template_content():
+    # Implement logic to load the template content from the database or a file
+    template = Template.query.order_by(Template.id.desc()).first()
+    return template.content if template and template.content else "Your template content here."
 
 @app.route('/gallery')
 @login_required
@@ -103,7 +118,7 @@ def login():
         if username in users and check_password_hash(users[username], password):
             user = User(username)
             login_user(user)
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('dashboard')) # Redirect to dashboard instead of upload_file
         
         flash("Invalid username or password")
     return render_template('login.html', title="Login")
