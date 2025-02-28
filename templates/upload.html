@@ -12,7 +12,8 @@
             <h1>Upload Your Documents</h1>
             <p>Ensure your files meet compliance standards with our AI-powered checker.</p>
             <div class="form-section">
-                <form action="/upload" method="post" enctype="multipart/form-data">
+                <!-- Form action updated to submit to '/result' -->
+                <form action="/result" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="template">Template File:</label>
                         <input type="file" id="template" name="template" required>

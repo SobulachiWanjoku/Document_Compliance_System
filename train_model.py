@@ -7,13 +7,13 @@ from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import nltk
 
 # Ensure necessary NLTK resources are available
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
+nltk.download('punkt', quiet=True)
+nltk.download('stopwords', quiet=True)
+nltk.download('wordnet', quiet=True)
 
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
@@ -35,11 +35,11 @@ data = [
 
 # Text preprocessing function
 def preprocess_text(text):
-    text = text.lower()
-    text = re.sub(r'[^a-zA-Z0-9]', ' ', text)  # Remove special characters
+    text = text.lower().strip()
+    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)  # Remove special characters except spaces
+    text = re.sub(r'\s+', ' ', text).strip()  # Normalize spaces
     tokens = word_tokenize(text)
     
-    # Ensure stopwords are downloaded before use
     stop_words = set(stopwords.words('english'))
     tokens = [word for word in tokens if word not in stop_words]
     
@@ -67,18 +67,22 @@ X_train, X_test, y_train, y_test = train_test_split(
     student_texts, y, test_size=0.2, random_state=42, stratify=y
 )
 
-# Train the model
-pipeline.fit(X_train, y_train)
+try:
+    # Train the model
+    pipeline.fit(X_train, y_train)
+    
+    # Evaluate the model
+    y_pred = pipeline.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"Model Accuracy: {accuracy:.4f}")
+    print("Classification Report:\n", classification_report(y_test, y_pred))
+    print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
 
-# Evaluate the model
-y_pred = pipeline.predict(X_test)
-accuracy = accuracy_score(y_test, y_pred)
-print(f"Model Accuracy: {accuracy:.4f}")
-print("Classification Report:\n", classification_report(y_test, y_pred))
+    # Save model and pipeline
+    save_dir = "saved_models"
+    os.makedirs(save_dir, exist_ok=True)
+    joblib.dump(pipeline, os.path.join(save_dir, 'compliance_model.pkl'))
+    print("Model training complete and saved.")
 
-# Save model and pipeline
-save_dir = "saved_models"
-os.makedirs(save_dir, exist_ok=True)
-joblib.dump(pipeline, os.path.join(save_dir, 'compliance_model.pkl'))
-
-print("Model training complete and saved.")
+except Exception as e:
+    print(f"An error occurred during training: {e}")
