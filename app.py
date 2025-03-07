@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from utils import check_compliance
 from models import db, Template
+from flask_migrate import Migrate
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -13,20 +14,21 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///templates.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'pdf', 'docx'}
+
+# Initialize SQLAlchemy and Migrate
 db.init_app(app)
+migrate = Migrate(app, db)  # Migrate is initialized here (after db.init_app)
 
 # Ensure upload folder exists
-if not os.path.exists(app.config['UPLOAD_FOLDER']):
-    os.makedirs(app.config['UPLOAD_FOLDER'])
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Initialize Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = "login"
 
-# Sample user data for login
-users = {
-    "admin": generate_password_hash("password123")
-}
+# Sample user data (Use a database in production)
+users = {"admin": generate_password_hash("password123")}
 
 # Helper function to check file extensions
 def allowed_file(filename):
@@ -41,71 +43,52 @@ def home():
 def upload_file():
     """Handle file upload and compliance checking"""
     if request.method == 'POST':
-        # Check if both files are in the request
-        if 'template' not in request.files or 'student_file' not in request.files:
+        template_file = request.files.get('template')
+        student_file = request.files.get('student_file')
+
+        if not template_file or not student_file:
             flash("Please select both files before uploading.", "error")
             return redirect(url_for('upload_file'))
 
-        template_file = request.files['template']
-        student_file = request.files['student_file']
-
-        # Check if files are selected
-        if template_file.filename == '' or student_file.filename == '':
-            flash("No file selected. Please choose files to upload.", "error")
-            return redirect(url_for('upload_file'))
-
-        # Validate file extensions
         if not allowed_file(template_file.filename) or not allowed_file(student_file.filename):
             flash("Invalid file type. Only PDF and DOCX files are allowed.", "error")
             return redirect(url_for('upload_file'))
 
         try:
-            # Sanitize file names
+            # Save template file
             template_filename = secure_filename(template_file.filename)
-            student_filename = secure_filename(student_file.filename)
-
-            # Save the template file to the upload folder
             template_path = os.path.join(app.config['UPLOAD_FOLDER'], template_filename)
             template_file.save(template_path)
 
-            # Retrieve the latest template for compliance checking
-            template = Template.query.order_by(Template.id.desc()).first()
-
-            # Check if template content is empty
-            if not template.content:
-                flash('Template content is empty. Please upload a valid template.', 'error')
-                return redirect(url_for('upload_file'))
-
-            # Save template path to the database
-            new_template = Template(name=template_filename, path=template_path)
+            # Save template in database
+            new_template = Template(name=template_filename, path=template_path)  # Ensure 'path' column exists
             db.session.add(new_template)
             db.session.commit()
 
-            # Save student file to the upload folder
+            # Save student file
+            student_filename = secure_filename(student_file.filename)
             student_path = os.path.join(app.config['UPLOAD_FOLDER'], student_filename)
             student_file.save(student_path)
 
-            # Retrieve the latest template for compliance checking
+            # Retrieve latest template
             template = Template.query.order_by(Template.id.desc()).first()
-
-            # Perform compliance check
-            try:
-                compliance_score, recommendations = check_compliance(template.path, student_path)
-                return render_template('result.html', score=compliance_score, recommendations=recommendations)
-            except Exception as e:
-                flash(f"Compliance check failed: {str(e)}", "error")
+            if not template:
+                flash("No templates found in the database.", "error")
                 return redirect(url_for('upload_file'))
+
+            # Read template text
+            with open(template.path, "r", encoding="utf-8") as f:
+                template_text = f.read()
+
+            # Compliance check
+            compliance_score, recommendations = check_compliance(template_text, student_path)
+            return render_template('result.html', score=compliance_score, recommendations=recommendations)
 
         except Exception as e:
             flash(f"An error occurred: {str(e)}", "error")
             return redirect(url_for('upload_file'))
 
     return render_template('upload.html')
-
-def load_template_content():
-    # Implement logic to load the template content from the database or a file
-    template = Template.query.order_by(Template.id.desc()).first()
-    return template.content if template and template.content else "Your template content here."
 
 @app.route('/gallery')
 @login_required
@@ -146,6 +129,7 @@ def dashboard():
 def delete_template(template_id):
     template = Template.query.get(template_id)
     if template:
+        os.remove(template.path)  # Delete file from storage
         db.session.delete(template)
         db.session.commit()
         flash("Template deleted successfully.", "success")
@@ -166,4 +150,6 @@ def logout():
         return redirect(url_for('dashboard'))
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()  # Ensure database tables are created
     app.run(debug=True)

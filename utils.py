@@ -1,16 +1,20 @@
+import os
 import cv2
 import pytesseract
-import numpy as np
-from docx import Document
-import os
 import re
+import joblib
+import logging
+import nltk
+from docx import Document
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-import joblib
-import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
+import chardet
+
+# Initialize logging
+logging.basicConfig(filename="error.log", level=logging.ERROR, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # Initialize NLTK resources
 nltk.download('punkt')
@@ -19,37 +23,67 @@ nltk.download('wordnet')
 
 # Load the pre-trained model and vectorizer
 try:
-    try:
-        model = joblib.load('saved_models/compliance_model.pkl')
-        vectorizer = joblib.load('saved_models/vectorizer.pkl')
-    except Exception as e:
-        raise ImportError(f"Failed to load model files: {str(e)}")
-
+    model = joblib.load('saved_models/compliance_model.pkl')
+    vectorizer = joblib.load('saved_models/vectorizer.pkl')
 except Exception as e:
-    raise ImportError(f"Failed to load model files: {str(e)}")
+    logging.error(f"Failed to load model files: {str(e)}")
+    raise ImportError(f"Failed to load model files: {str(e)}. Ensure files exist and are properly trained.")
 
+def preprocess_text(text):
+    """Preprocess text for better comparison"""
+    try:
+        text = text.lower()  # Convert to lowercase
+
+        # Remove stopwords
+        stop_words = set(stopwords.words('english'))
+        words = word_tokenize(text)
+        filtered_words = [word for word in words if word not in stop_words]
+
+        # Lemmatize words
+        lemmatizer = WordNetLemmatizer()
+        lemmatized_words = [lemmatizer.lemmatize(word) for word in filtered_words]
+
+        return ' '.join(lemmatized_words)
+
+    except Exception as e:
+        logging.error(f"Text preprocessing failed: {str(e)}")
+        raise ValueError(f"Text preprocessing failed: {str(e)}")
+
+def extract_text_from_file(file_path):
+    """Extracts text from either a .docx file or an image file"""
+    try:
+        file_extension = os.path.splitext(file_path)[1].lower()
+
+        if file_extension == '.docx':
+            doc = Document(file_path)
+            extracted_text = "\n".join([para.text for para in doc.paragraphs])
+
+        elif file_extension in ['.jpg', '.jpeg', '.png']:
+            student_img = cv2.imread(file_path)
+            if student_img is None:
+                raise ValueError(f"Failed to load image at path: {file_path}")
+            student_gray = cv2.cvtColor(student_img, cv2.COLOR_BGR2GRAY)
+            extracted_text = pytesseract.image_to_string(student_gray).strip()
+
+        else:
+            raise ValueError(f"Unsupported file type: {file_extension}")
+
+        # Detect file encoding before decoding
+        raw_bytes = extracted_text.encode(errors='replace')
+        detected_encoding = chardet.detect(raw_bytes)['encoding']
+        
+        # Decode using detected encoding
+        return raw_bytes.decode(detected_encoding, errors='replace')
+
+    except Exception as e:
+        logging.error(f"Error extracting text from {file_path}: {str(e)}")
+        raise ValueError(f"Error extracting text from file: {str(e)}")
+    
 def check_compliance(template_text, student_path):
     """Check document compliance and generate recommendations"""
     try:
-        # Determine the file type based on the file extension
-        file_extension = os.path.splitext(student_path)[1].lower()
-
-        if file_extension == '.docx':
-            # Handle DOCX file
-            doc = Document(student_path)
-            student_text = "\n".join([para.text for para in doc.paragraphs])
-        else:
-            # Handle image file
-            student_img = cv2.imread(student_path)
-
-        if student_img is None and (file_extension == '.jpg' or file_extension == '.jpeg'):
-            raise ValueError(f"Failed to load student image at path: {student_path}")
-        elif student_img is None:
-            raise ValueError(f"Unsupported file type or failed to load student file at path: {student_path}")
-
-        if student_img is not None:
-            student_gray = cv2.cvtColor(student_img, cv2.COLOR_BGR2GRAY)
-            student_text = pytesseract.image_to_string(student_gray).strip()
+        # Extract text from student file
+        student_text = extract_text_from_file(student_path)
 
         # Ensure student_text is a string
         if isinstance(student_text, bytes):
@@ -62,7 +96,7 @@ def check_compliance(template_text, student_path):
         # Calculate similarity
         tfidf_matrix = vectorizer.transform([template_text, student_text])
         similarity = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])
-        score = similarity[0][0] * 100  # Scale to percentage
+        score = round(similarity[0][0] * 100, 2)  # Scale to percentage
 
         # Generate recommendations
         recommendations = generate_recommendations(template_text, student_text)
@@ -70,6 +104,7 @@ def check_compliance(template_text, student_path):
         return score, recommendations
 
     except Exception as e:
+        logging.error(f"Compliance check failed: {str(e)}")
         raise ValueError(f"Compliance check failed: {str(e)}")
 
 def generate_recommendations(template_text, student_text):
@@ -97,18 +132,19 @@ def generate_recommendations(template_text, student_text):
 
     return recommendations if recommendations else ["Document meets all requirements"]
 
-def preprocess_text(text):
-    """Preprocess text for better comparison"""
-    # Convert to lowercase
-    text = text.lower()
+def save_template(name, path, db, Template):
+    """Save template details to the database"""
+    try:
+        # Extract text before saving
+        extracted_text = extract_text_from_file(path)
+        
+        # Save template path and extracted content
+        new_template = Template(name=name, path=path, content=extracted_text)  
+        db.session.add(new_template)
+        db.session.commit()
+        print("Template saved successfully.")
     
-    # Remove stopwords
-    stop_words = set(stopwords.words('english'))
-    words = word_tokenize(text)
-    filtered_words = [word for word in words if word not in stop_words]
-    
-    # Lemmatize words
-    lemmatizer = WordNetLemmatizer()
-    lemmatized_words = [lemmatizer.lemmatize(word) for word in filtered_words]
-    
-    return ' '.join(lemmatized_words)
+    except Exception as e:
+        db.session.rollback()
+        logging.error(f"Error saving template: {str(e)}")
+        print(f"Error saving template: {str(e)}")

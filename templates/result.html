@@ -11,15 +11,57 @@
         <div class="hero-content">
             <h1>Compliance Results</h1>
             <p>Your document has been evaluated successfully!</p>
-            <p><strong>Score:</strong> {{ score }}%</p>
+
+            <!-- Flash Messages -->
+            <div class="flash-messages">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert {{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <!-- Compliance Score Display -->
+            <p><strong>Score:</strong> <span id="score" class="score">{{ score }}%</span></p>
+
+            <!-- Recommendations -->
             <h3>Recommendations:</h3>
             <ul>
                 {% for recommendation in recommendations %}
                     <li>{{ recommendation }}</li>
                 {% endfor %}
             </ul>
-            <a href="/upload" class="btn btn-primary">Try Again</a>
+
+            <!-- Buttons -->
+            <div class="button-group">
+                <a href="/upload" class="btn btn-primary">Try Again</a>
+                <a href="#" class="btn btn-secondary" id="download-report">Download Report</a>
+            </div>
         </div>
     </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const scoreElement = document.getElementById("score");
+            const score = parseFloat(scoreElement.textContent);
+
+            // Apply color based on score
+            if (score >= 80) {
+                scoreElement.style.color = "green";
+            } else if (score >= 50) {
+                scoreElement.style.color = "orange";
+            } else {
+                scoreElement.style.color = "red";
+            }
+
+            // Simulated report download (implement in backend if needed)
+            document.getElementById("download-report").addEventListener("click", function (event) {
+                event.preventDefault();
+                alert("Download feature coming soon!");
+            });
+        });
+    </script>
 </body>
 </html>

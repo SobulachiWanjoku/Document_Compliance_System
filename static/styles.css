@@ -109,3 +109,42 @@ ul li {
     margin-bottom: 0.5rem;
     font-size: 1rem;
 }
+/* Flash Messages */
+.flash-messages .alert {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.alert.error {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+.alert.success {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Score Styling */
+.score {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+/* Buttons */
+.button-group {
+    margin-top: 20px;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
