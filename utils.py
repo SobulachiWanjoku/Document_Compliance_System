@@ -14,7 +14,13 @@ from nltk.stem import WordNetLemmatizer
 import chardet
 
 # Initialize logging
-logging.basicConfig(filename="error.log", level=logging.ERROR, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(level=logging.INFO, 
+                    format="%(asctime)s - %(levelname)s - %(message)s")
+file_handler = logging.FileHandler("error.log")
+file_handler.setLevel(logging.ERROR)
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+file_handler.setFormatter(formatter)
+logging.getLogger().addHandler(file_handler)
 
 # Initialize NLTK resources
 nltk.download('punkt')
@@ -72,8 +78,13 @@ def extract_text_from_file(file_path):
         raw_bytes = extracted_text.encode(errors='replace')
         detected_encoding = chardet.detect(raw_bytes)['encoding']
         
-        # Decode using detected encoding
-        return raw_bytes.decode(detected_encoding, errors='replace')
+        # Attempt to decode using detected encoding
+        try:
+            return raw_bytes.decode(detected_encoding, errors='replace')
+        except (UnicodeDecodeError, TypeError):
+            # Fallback to 'latin-1' encoding if detection fails
+            return raw_bytes.decode('latin-1', errors='replace')
+
 
     except Exception as e:
         logging.error(f"Error extracting text from {file_path}: {str(e)}")
@@ -82,23 +93,31 @@ def extract_text_from_file(file_path):
 def check_compliance(template_text, student_path):
     """Check document compliance and generate recommendations"""
     try:
-        # Extract text from student file
+        logging.info("Extracting text from student file...")
+        logging.info(f"Template text: {template_text[:50]}...")  # Log the first 50 characters of the template text
+
         student_text = extract_text_from_file(student_path)
 
         # Ensure student_text is a string
         if isinstance(student_text, bytes):
             student_text = student_text.decode('utf-8')
 
-        # Preprocess texts
+        logging.info("Preprocessing texts...")
+        logging.info(f"Student text: {student_text[:50]}...")  # Log the first 50 characters of the student text
+
         template_text = preprocess_text(template_text)
         student_text = preprocess_text(student_text)
 
-        # Calculate similarity
+        logging.info("Calculating similarity...")
+        logging.info("TF-IDF matrix created successfully.")
+
         tfidf_matrix = vectorizer.transform([template_text, student_text])
         similarity = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])
         score = round(similarity[0][0] * 100, 2)  # Scale to percentage
 
-        # Generate recommendations
+        logging.info("Generating recommendations...")
+        logging.info(f"Score calculated: {score}")  # Log the calculated score
+
         recommendations = generate_recommendations(template_text, student_text)
         
         return score, recommendations

@@ -1,9 +1,13 @@
 import os
+import logging
 from flask import Flask, render_template, request, redirect, url_for, flash
+
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from utils import check_compliance
+from docx import Document
+
 from models import db, Template
 from flask_migrate import Migrate
 
@@ -77,15 +81,24 @@ def upload_file():
                 return redirect(url_for('upload_file'))
 
             # Read template text
-            with open(template.path, "r", encoding="utf-8") as f:
-                template_text = f.read()
+            # Read template text
+            if template.path.endswith('.docx'):
+                doc = Document(template.path)
+                template_text = "\n".join([para.text for para in doc.paragraphs])
+            else:
+                with open(template.path, "r", encoding="utf-8") as f:
+                    template_text = f.read()
+
 
             # Compliance check
             compliance_score, recommendations = check_compliance(template_text, student_path)
             return render_template('result.html', score=compliance_score, recommendations=recommendations)
 
         except Exception as e:
-            flash(f"An error occurred: {str(e)}", "error")
+            logging.error(f"An error occurred during file upload: {str(e)}")
+            flash("An error occurred during file upload: " + str(e), "error")
+
+
             return redirect(url_for('upload_file'))
 
     return render_template('upload.html')
