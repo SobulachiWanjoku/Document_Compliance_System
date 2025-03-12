@@ -1,150 +1,66 @@
-/* General Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+/* Apply full-screen gradient background */
 body {
-    font-family: 'Arial', sans-serif;
-    color: #333;
-    background: linear-gradient(to bottom, #005c97, #363795);
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #1e3c72, #f953c6);
     height: 100vh;
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: center;
+    margin: 0;
 }
 
-.hero {
+/* Centered login container */
+.login-container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
     text-align: center;
-    color: white;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 2rem;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 800px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    width: 320px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
 
-.hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+/* Heading */
+h1 {
+    color: #fff;
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
-.hero p {
-    font-size: 1.2rem;
-    margin-bottom: 1.5rem;
+/* Input fields */
+.input-group {
+    margin-bottom: 15px;
 }
 
-.form-section {
-    margin-top: 1.5rem;
-    text-align: left;
-}
-
-.form-group {
-    margin-bottom: 1rem;
-}
-
-label {
-    font-size: 1rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    display: block;
-}
-
-input[type="file"] {
-    padding: 0.5rem;
+.input-group input {
     width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 1rem;
-}
-
-.btn {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    border-radius: 20px;
-    text-decoration: none;
-    font-weight: bold;
-    display: inline-block;
-    cursor: pointer;
-}
-
-.btn-primary {
-    background: #f76c6c;
-    color: white;
+    padding: 12px;
     border: none;
-}
-
-.btn-primary:hover {
-    background: #f54d4d;
-}
-
-.hero-buttons {
-    margin-top: 1.5rem;
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-}
-
-.hero-buttons .btn-secondary {
-    background: #fff;
-    color: #005c97;
-    border: 2px solid #fff;
-}
-
-.hero-buttons .btn-secondary:hover {
-    background: #e5e5e5;
-    color: #363795;
-    border-color: #363795;
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 1.5rem;
-}
-
-ul li {
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
-}
-/* Flash Messages */
-.flash-messages .alert {
-    padding: 10px;
-    margin: 10px 0;
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    outline: none;
 }
 
-.alert.error {
-    background-color: #ff4d4d;
-    color: white;
+.input-group input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
 }
 
-.alert.success {
-    background-color: #4CAF50;
-    color: white;
+/* Login button */
+button {
+    width: 50%;
+    padding: 12px;
+    border: none;
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 18px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-/* Score Styling */
-.score {
-    font-size: 1.5em;
-    font-weight: bold;
-}
-
-/* Buttons */
-.button-group {
-    margin-top: 20px;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    color: white;
-    padding: 10px 15px;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-.btn-secondary:hover {
-    background-color: #5a6268;
+button:hover {
+    background: rgba(255, 255, 255, 0.4);
 }
