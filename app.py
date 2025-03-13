@@ -64,7 +64,11 @@ def upload_file():
             template_path = os.path.join(app.config['UPLOAD_FOLDER'], template_filename)
             template_file.save(template_path)
 
+            # Log the template path being saved
+            logging.info(f"Saving template path: {template_path}")
+            
             # Save template in database
+
             new_template = Template(name=template_filename, path=template_path)  # Ensure 'path' column exists
             db.session.add(new_template)
             db.session.commit()
@@ -107,8 +111,15 @@ def upload_file():
 @login_required
 def gallery():
     """Displays all uploaded templates for the logged-in user."""
-    templates = Template.query.all()
-    return render_template('gallery.html', templates=templates)
+    try:
+        templates = [template for template in Template.query.all() if os.path.exists(template.path)]
+
+        return render_template('gallery.html', templates=templates)
+    except Exception as e:
+        logging.error(f"An error occurred while fetching templates: {str(e)}")
+        flash("An error occurred while fetching templates. Please try again later.", "error")
+        return redirect(url_for('dashboard'))
+
 
 class User(UserMixin):
     def __init__(self, username):
@@ -141,14 +152,30 @@ def dashboard():
 @login_required
 def delete_template(template_id):
     template = Template.query.get(template_id)
-    if template:
-        os.remove(template.path)  # Delete file from storage
-        db.session.delete(template)
-        db.session.commit()
-        flash("Template deleted successfully.", "success")
-    else:
+    
+    if not template:
         flash("Template not found.", "error")
+        return redirect(url_for('gallery'))
+    
+    logging.info(f"Attempting to delete template at path: {template.path}")
+
+    if template.path:
+        try:
+            if os.path.exists(template.path):
+                os.remove(template.path)  # Delete file from storage
+            else:
+                logging.warning(f"File not found: {template.path}")
+        except Exception as e:
+            logging.error(f"Error deleting file: {str(e)}")
+            flash("An error occurred while deleting the template file.", "")
+            return redirect(url_for('gallery'))
+    
+    db.session.delete(template)
+    db.session.commit()
+    flash("Template deleted successfully.", "success")
+    
     return redirect(url_for('gallery'))
+
 
 @app.route('/logout')
 @login_required

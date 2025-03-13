@@ -34,13 +34,9 @@
                         <label for="student_file">Student File:</label>
                         <input type="file" id="student_file" name="student_file" required>
                     </div>
-
-                    <!-- Drag and Drop Section -->
-                    <div id="drop-area">
-                        <p>Drag and drop files here or click to upload</p>
-                    </div>
-
                     <button type="submit" class="btn btn-primary">Check Compliance</button>
+                    <br>
+                    <a href="{{ url_for('gallery') }}">Template Gallery</a>
                 </form>
             </div>
         </div>
