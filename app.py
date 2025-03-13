@@ -167,7 +167,7 @@ def delete_template(template_id):
                 logging.warning(f"File not found: {template.path}")
         except Exception as e:
             logging.error(f"Error deleting file: {str(e)}")
-            flash("An error occurred while deleting the template file.", "")
+            flash("An error occurred while deleting the template file.", "error")
             return redirect(url_for('gallery'))
     
     db.session.delete(template)
