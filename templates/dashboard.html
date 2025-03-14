@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document Compliance Checker</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-    <h1>Welcome to Document Compliance Checker</h1>
-    
+        
     <section class="hero">
         <div class="hero-content">
             <h1>Welcome to Document Compliance Checker</h1>
@@ -16,9 +15,10 @@
                 Our system ensures your documents meet the required standards and provides actionable 
                 recommendations to improve compliance.
             </p>
+            
             <div class="hero-buttons">
-                <a href="{{ url_for('upload_file') }}">Upload Documents</a>
-                <a href="{{ url_for('gallery') }}">Template Gallery</a>
+                <a href="{{ url_for('upload_file') }}" class="button">Upload Documents</a>
+                <a href="{{ url_for('gallery') }}" class="button">Template Gallery</a>
             </div>
         </div>
     </section>

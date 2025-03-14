@@ -47,7 +47,21 @@ h1 {
     color: rgba(255, 255, 255, 0.7);
 }
 
-/* Login button */
+/* General styling for buttons */
+.button {
+    width: 25%;
+    padding: 12px;
+    border: none;
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease-in-out;
+}
 button {
     width: 50%;
     padding: 12px;
@@ -56,11 +70,38 @@ button {
     background: rgba(255, 255, 255, 0.2);
     color: #fff;
     font-size: 18px;
+    font-weight: bold;
     border-radius: 25px;
     cursor: pointer;
-    transition: 0.3s;
+    text-align: center;
+    transition: background-color 0.3s ease-in-out;
 }
-
 button:hover {
     background: rgba(255, 255, 255, 0.4);
+}
+
+.button:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* Container for the buttons */
+.hero-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+}
+
+.button-group {
+    width: 25%;
+    padding: 12px;
+    border: none;
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease-in-out;
 }
