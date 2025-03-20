@@ -167,3 +167,13 @@ FileNotFoundError: [WinError 2] The system cannot find the file specified: 'defa
 2025-03-13 14:52:12,625 - ERROR - Error deleting file: [WinError 2] The system cannot find the file specified: 'default_path'
 2025-03-13 14:52:14,566 - ERROR - Error deleting file: [WinError 2] The system cannot find the file specified: 'uploads\\Software_configuration_and_maintenance_summary.docx'
 2025-03-13 14:52:16,351 - ERROR - Error deleting file: [WinError 2] The system cannot find the file specified: 'uploads\\Software_configuration_and_maintenance_summary.docx'
+2025-03-17 13:58:59,913 - ERROR - Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 13:58:59,914 - ERROR - An error occurred during file upload: Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 13:59:19,284 - ERROR - Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 13:59:19,285 - ERROR - An error occurred during file upload: Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 13:59:34,201 - ERROR - Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 13:59:34,201 - ERROR - An error occurred during file upload: Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 14:05:56,437 - ERROR - Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 14:05:56,438 - ERROR - An error occurred during file upload: Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 14:33:18,926 - ERROR - Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 14:33:18,927 - ERROR - An error occurred during file upload: Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value

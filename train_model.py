@@ -8,11 +8,31 @@ from nltk.stem import WordNetLemmatizer
 import re
 import pandas as pd
 from typing import List, Tuple
+import logging
 
 # Download required NLTK data
-nltk.download('punkt', quiet=True)
-nltk.download('stopwords', quiet=True)
-nltk.download('wordnet', quiet=True)
+try:
+    nltk.download('punkt', quiet=True)
+    nltk.download('stopwords', quiet=True)
+    nltk.download('wordnet', quiet=True)
+except Exception as e:
+    logging.error(f"Failed to download NLTK resources: {str(e)}")
+
+try:
+    stopwords.words('english')
+except LookupError:
+    nltk.download('stopwords')
+    
+try:
+    word_tokenize("test")
+except LookupError:
+    nltk.download('punkt')
+
+try:
+    WordNetLemmatizer()
+except LookupError:
+    nltk.download('wordnet')
+
 
 class DocumentSimilarityAnalyzer:
     def __init__(self):

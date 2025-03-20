@@ -23,9 +23,92 @@ file_handler.setFormatter(formatter)
 logging.getLogger().addHandler(file_handler)
 
 # Initialize NLTK resources
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
+try:
+    nltk.download('punkt')
+    nltk.download('stopwords')
+    nltk.download('wordnet')
+except Exception as e:
+    logging.error(f"Failed to download NLTK resources: {str(e)}")
+    logging.info("Please ensure you have an active internet connection or download the resources manually.")
+
+
+    logging.info("Please ensure you have an active internet connection or download the resources manually.")
+
+    logging.info("Please ensure you have an active internet connection or download the resources manually.")
+
+
+
+
+try:
+    stopwords.words('english')
+except LookupError:
+    logging.info("Stopwords not found. Attempting to download...")
+    nltk.download('stopwords')
+
+except LookupError:
+    logging.info("Stopwords not found. Attempting to download...")
+    nltk.download('stopwords')
+
+except LookupError:
+    logging.info("Stopwords not found. Attempting to download...")
+
+except LookupError:
+    logging.info("Stopwords not found. Attempting to download...")
+
+except LookupError:
+    logging.info("Stopwords not found. Attempting to download...")
+
+except LookupError:
+    nltk.download('stopwords')
+    
+
+
+try:
+    word_tokenize("test")
+except LookupError:
+    logging.info("Punkt tokenizer not found. Attempting to download...")
+    nltk.download('punkt')
+
+except LookupError:
+    logging.info("Punkt tokenizer not found. Attempting to download...")
+    nltk.download('punkt')
+
+except LookupError:
+    logging.info("Punkt tokenizer not found. Attempting to download...")
+
+except LookupError:
+    logging.info("Punkt tokenizer not found. Attempting to download...")
+
+except LookupError:
+    logging.info("Punkt tokenizer not found. Attempting to download...")
+
+except LookupError:
+    nltk.download('punkt')
+
+
+
+try:
+    WordNetLemmatizer()
+except LookupError:
+    logging.info("WordNet lemmatizer not found. Attempting to download...")
+    nltk.download('wordnet')
+
+except LookupError:
+    logging.info("WordNet lemmatizer not found. Attempting to download...")
+    nltk.download('wordnet')
+
+except LookupError:
+    logging.info("WordNet lemmatizer not found. Attempting to download...")
+
+except LookupError:
+    logging.info("WordNet lemmatizer not found. Attempting to download...")
+
+except LookupError:
+    logging.info("WordNet lemmatizer not found. Attempting to download...")
+
+except LookupError:
+    nltk.download('wordnet')
+
 
 # Load the pre-trained model and vectorizer
 try:
@@ -94,9 +177,10 @@ def check_compliance(template_text, student_path):
     """Check document compliance and generate recommendations"""
     try:
         logging.info("Extracting text from student file...")
-        logging.info(f"Template text: {template_text[:50]}...")  # Log the first 50 characters of the template text
-
+        logging.info(f"Template text extracted: {template_text[:50]}...")  # Log the first 50 characters of the template text
         student_text = extract_text_from_file(student_path)
+        logging.info(f"Student text extracted: {student_text[:50]}...")  # Log the first 50 characters of the student text
+
 
         # Ensure student_text is a string
         if isinstance(student_text, bytes):
