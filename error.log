@@ -1,0 +1,179 @@
+2025-03-07 12:41:58,183 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-07 12:41:58,184 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-07 12:43:13,806 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-07 12:43:13,807 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-07 12:46:55,824 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-07 12:46:55,824 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-07 12:46:55,830 - INFO -  * Restarting with stat
+2025-03-07 12:47:02,665 - WARNING -  * Debugger is active!
+2025-03-07 12:47:02,670 - INFO -  * Debugger PIN: 551-638-467
+2025-03-07 12:48:43,745 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-07 12:48:43,745 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-07 12:48:43,749 - INFO -  * Restarting with stat
+2025-03-07 12:48:53,438 - WARNING -  * Debugger is active!
+2025-03-07 12:48:53,443 - INFO -  * Debugger PIN: 551-638-467
+2025-03-07 13:05:30,783 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-07 13:05:30,787 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-07 13:05:30,795 - INFO -  * Restarting with stat
+2025-03-07 13:05:57,055 - WARNING -  * Debugger is active!
+2025-03-07 13:05:57,095 - INFO -  * Debugger PIN: 551-638-467
+2025-03-10 17:56:15,424 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-10 17:56:15,428 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-10 17:56:56,338 - INFO - 127.0.0.1 - - [10/Mar/2025 17:56:56] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-10 17:56:56,372 - INFO - 127.0.0.1 - - [10/Mar/2025 17:56:56] "GET /login HTTP/1.1" 200 -
+2025-03-10 17:56:56,722 - INFO - 127.0.0.1 - - [10/Mar/2025 17:56:56] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+2025-03-10 17:56:56,753 - INFO - 127.0.0.1 - - [10/Mar/2025 17:56:56] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-10 19:01:57,706 - INFO - 127.0.0.1 - - [10/Mar/2025 19:01:57] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-03-10 19:01:57,721 - INFO - 127.0.0.1 - - [10/Mar/2025 19:01:57] "GET /dashboard HTTP/1.1" 200 -
+2025-03-10 19:01:57,784 - INFO - 127.0.0.1 - - [10/Mar/2025 19:01:57] "[33mGET /static/style.css HTTP/1.1[0m" 404 -
+2025-03-10 19:01:59,219 - INFO - 127.0.0.1 - - [10/Mar/2025 19:01:59] "GET /upload HTTP/1.1" 200 -
+2025-03-10 19:01:59,272 - INFO - 127.0.0.1 - - [10/Mar/2025 19:01:59] "[33mGET /static/style.css HTTP/1.1[0m" 404 -
+2025-03-10 19:01:59,277 - INFO - 127.0.0.1 - - [10/Mar/2025 19:01:59] "[33mGET /static/script.js HTTP/1.1[0m" 404 -
+2025-03-10 19:02:04,855 - INFO - 127.0.0.1 - - [10/Mar/2025 19:02:04] "[32mPOST /upload HTTP/1.1[0m" 302 -
+2025-03-10 19:02:04,867 - INFO - 127.0.0.1 - - [10/Mar/2025 19:02:04] "GET /upload HTTP/1.1" 200 -
+2025-03-10 19:02:04,909 - INFO - 127.0.0.1 - - [10/Mar/2025 19:02:04] "[33mGET /static/style.css HTTP/1.1[0m" 404 -
+2025-03-10 19:02:04,911 - INFO - 127.0.0.1 - - [10/Mar/2025 19:02:04] "[33mGET /static/script.js HTTP/1.1[0m" 404 -
+2025-03-10 21:48:07,155 - INFO - 127.0.0.1 - - [10/Mar/2025 21:48:07] "GET /upload HTTP/1.1" 200 -
+2025-03-10 21:48:11,021 - INFO - 127.0.0.1 - - [10/Mar/2025 21:48:11] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-11 19:55:39,621 - ERROR - An error occurred during file upload: name 'Document' is not defined
+2025-03-11 19:58:59,137 - ERROR - An error occurred during file upload: name 'Document' is not defined
+2025-03-13 14:32:09,552 - ERROR - Exception on /gallery [GET]
+Traceback (most recent call last):
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Documents\Document_Compliance_System\app.py", line 111, in gallery
+    return render_template('gallery.html', templates=templates)
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\USER\Documents\Document_Compliance_System\templates\gallery.html", line 22, in top-level template code
+    <a href="{{ url_for('dashboard.html') }}">Back to Home</a>
+    ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 1121, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 1110, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+        endpoint,
+    ...<3 lines>...
+        force_external=_external,
+    )
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\werkzeug\routing\map.py", line 924, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'dashboard.html'. Did you mean 'dashboard' instead?
+2025-03-13 14:36:59,717 - ERROR - Exception on /delete_template/23 [POST]
+Traceback (most recent call last):
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Documents\Document_Compliance_System\app.py", line 151, in delete_template
+    os.remove(template.path)  # Delete file from storage
+    ~~~~~~~~~^^^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] The system cannot find the file specified: 'default_path'
+2025-03-13 14:37:02,795 - ERROR - Exception on /delete_template/23 [POST]
+Traceback (most recent call last):
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Documents\Document_Compliance_System\app.py", line 151, in delete_template
+    os.remove(template.path)  # Delete file from storage
+    ~~~~~~~~~^^^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] The system cannot find the file specified: 'default_path'
+2025-03-13 14:40:26,101 - ERROR - Exception on /delete_template/23 [POST]
+Traceback (most recent call last):
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Documents\Document_Compliance_System\app.py", line 151, in delete_template
+    try:
+FileNotFoundError: [WinError 2] The system cannot find the file specified: 'default_path'
+2025-03-13 14:40:27,551 - ERROR - Exception on /delete_template/23 [POST]
+Traceback (most recent call last):
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\USER\Documents\Document_Compliance_System\venv\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Documents\Document_Compliance_System\app.py", line 151, in delete_template
+    try:
+FileNotFoundError: [WinError 2] The system cannot find the file specified: 'default_path'
+2025-03-13 14:46:52,681 - ERROR - Error deleting file: [WinError 2] The system cannot find the file specified: 'default_path'
+2025-03-13 14:46:54,395 - ERROR - Error deleting file: [WinError 2] The system cannot find the file specified: 'default_path'
+2025-03-13 14:46:55,199 - ERROR - Error deleting file: [WinError 2] The system cannot find the file specified: 'default_path'
+2025-03-13 14:46:55,929 - ERROR - Error deleting file: [WinError 2] The system cannot find the file specified: 'default_path'
+2025-03-13 14:46:56,429 - ERROR - Error deleting file: [WinError 2] The system cannot find the file specified: 'default_path'
+2025-03-13 14:46:56,983 - ERROR - Error deleting file: [WinError 2] The system cannot find the file specified: 'default_path'
+2025-03-13 14:47:01,430 - ERROR - Error deleting file: [WinError 2] The system cannot find the file specified: 'uploads\\Software_configuration_and_maintenance_summary.docx'
+2025-03-13 14:47:03,267 - ERROR - Error deleting file: [WinError 2] The system cannot find the file specified: 'uploads\\Software_configuration_and_maintenance_summary.docx'
+2025-03-13 14:47:05,177 - ERROR - Error deleting file: [WinError 2] The system cannot find the file specified: 'uploads\\Software_configuration_and_maintenance_summary.docx'
+2025-03-13 14:52:10,873 - ERROR - Error deleting file: [WinError 2] The system cannot find the file specified: 'default_path'
+2025-03-13 14:52:11,847 - ERROR - Error deleting file: [WinError 2] The system cannot find the file specified: 'default_path'
+2025-03-13 14:52:12,625 - ERROR - Error deleting file: [WinError 2] The system cannot find the file specified: 'default_path'
+2025-03-13 14:52:14,566 - ERROR - Error deleting file: [WinError 2] The system cannot find the file specified: 'uploads\\Software_configuration_and_maintenance_summary.docx'
+2025-03-13 14:52:16,351 - ERROR - Error deleting file: [WinError 2] The system cannot find the file specified: 'uploads\\Software_configuration_and_maintenance_summary.docx'
+2025-03-17 13:58:59,913 - ERROR - Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 13:58:59,914 - ERROR - An error occurred during file upload: Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 13:59:19,284 - ERROR - Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 13:59:19,285 - ERROR - An error occurred during file upload: Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 13:59:34,201 - ERROR - Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 13:59:34,201 - ERROR - An error occurred during file upload: Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 14:05:56,437 - ERROR - Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 14:05:56,438 - ERROR - An error occurred during file upload: Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 14:33:18,926 - ERROR - Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
+2025-03-17 14:33:18,927 - ERROR - An error occurred during file upload: Compliance check failed: cannot access local variable 'student_text' where it is not associated with a value
