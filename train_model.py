@@ -1,4 +1,5 @@
-import numpy as np 
+import numpy as np
+import pickle as pkl
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import nltk
@@ -6,39 +7,25 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 import re
-import pandas as pd
-from typing import List, Tuple
+import docx  # python-docx for Word documents
+from typing import Dict, List
 import logging
+from pathlib import Path
 
-# Download required NLTK data
-try:
-    nltk.download('punkt', quiet=True)
-    nltk.download('stopwords', quiet=True)
-    nltk.download('wordnet', quiet=True)
-except Exception as e:
-    logging.error(f"Failed to download NLTK resources: {str(e)}")
+# Download necessary NLTK resources
+nltk.download('punkt', quiet=True)
+nltk.download('stopwords', quiet=True)
+nltk.download('wordnet', quiet=True)
 
-try:
-    stopwords.words('english')
-except LookupError:
-    nltk.download('stopwords')
-    
-try:
-    word_tokenize("test")
-except LookupError:
-    nltk.download('punkt')
+logging.basicConfig(level=logging.INFO)
 
-try:
-    WordNetLemmatizer()
-except LookupError:
-    nltk.download('wordnet')
+class DocumentComplianceAnalyzer:
+    compliance_threshold = 0.7  # Default compliance score threshold
 
-
-class DocumentSimilarityAnalyzer:
     def __init__(self):
         self.vectorizer = TfidfVectorizer(
             min_df=1,
-            ngram_range=(1, 2),  # Include both unigrams and bigrams
+            ngram_range=(1, 2),
             stop_words='english',
             lowercase=True,
             strip_accents='unicode',
@@ -47,143 +34,162 @@ class DocumentSimilarityAnalyzer:
         self.lemmatizer = WordNetLemmatizer()
         self.stop_words = set(stopwords.words('english'))
 
+    def extract_text_from_docx(self, docx_path: str) -> str:
+        """Extract text from a Word document."""
+        if not Path(docx_path).is_file():
+            logging.error(f"File not found: {docx_path}")
+            return ""
+
+        """Extract text from a Word document."""
+        try:
+            doc = docx.Document(docx_path)
+            return " ".join([para.text for para in doc.paragraphs])
+        except Exception as e:
+            logging.error(f"Error extracting text from {docx_path}: {e}")
+            return ""
+
+            return ""
+
+    def extract_headings_from_docx(self, docx_path: str) -> List[str]:
+        """Extract headings from a Word document based on bold and capitalization."""
+        try:
+            doc = docx.Document(docx_path)
+            headings = [para.text for para in doc.paragraphs if para.style.name.startswith("Heading")]
+            return headings
+        except Exception as e:
+            logging.error(f"Error extracting headings from {docx_path}: {e}")
+            return []
+
+    def extract_formatting_from_docx(self, docx_path: str) -> Dict:
+        """Extract formatting information from a Word document."""
+        try:
+            doc = docx.Document(docx_path)
+            formatting = {
+                "fonts": set(),
+                "sizes": set(),
+                "bold_count": 0,
+                "italic_count": 0,
+                "underline_count": 0,
+                "alignments": set()
+            }
+            for para in doc.paragraphs:
+                for run in para.runs:
+                    if run.font:
+                        formatting["fonts"].add(run.font.name or "Unknown")
+                        formatting["sizes"].add(run.font.size or 0)
+                        if run.bold:
+                            formatting["bold_count"] += 1
+                        if run.italic:
+                            formatting["italic_count"] += 1
+                        if run.underline:
+                            formatting["underline_count"] += 1
+                if para.alignment is not None:
+                    formatting["alignments"].add(para.alignment)
+            return formatting
+        except Exception as e:
+            logging.error(f"Error extracting formatting from {docx_path}: {e}")
+            return {}
+
     def preprocess_text(self, text: str) -> str:
-        """
-        Preprocess the input text with advanced cleaning and normalization.
-        """
-        # Convert to lowercase and strip whitespace
+        """Clean and normalize text while keeping meaningful punctuation."""
         text = text.lower().strip()
-        
-        # Remove special characters but keep sentence structure
         text = re.sub(r'[^a-zA-Z0-9\s.,!?]', '', text)
-        
-        # Normalize whitespace
         text = re.sub(r'\s+', ' ', text)
-        
-        # Tokenize while preserving sentence structure
         tokens = word_tokenize(text)
-        
-        # Remove stopwords and lemmatize
-        processed_tokens = []
-        for token in tokens:
-            if token not in self.stop_words and len(token) > 1:
-                lemmatized = self.lemmatizer.lemmatize(token)
-                processed_tokens.append(lemmatized)
-        
+        processed_tokens = [self.lemmatizer.lemmatize(token) for token in tokens if token not in self.stop_words]
         return ' '.join(processed_tokens)
 
-    def calculate_similarity(self, doc1: str, doc2: str) -> dict:
-        """
-        Calculate similarity between two documents with detailed metrics.
-        """
-        # Preprocess both documents
+    def calculate_similarity(self, doc1: str, doc2: str) -> float:
+        """Compute textual similarity using pre-fitted TF-IDF vectorizer."""
+        if not hasattr(self.vectorizer, "vocabulary_"):
+            logging.error("TF-IDF vectorizer is not fitted. Please fit the vectorizer before using it.")
+            return 0.0
+
+        """Compute textual similarity using pre-fitted TF-IDF vectorizer."""
         doc1_processed = self.preprocess_text(doc1)
         doc2_processed = self.preprocess_text(doc2)
+        logging.info(f"Template preprocessed text: {doc1_processed[:100]}...")  # Log first 100 characters
+        logging.info(f"Student preprocessed text: {doc2_processed[:100]}...")  # Log first 100 characters
+        tfidf_matrix = self.vectorizer.transform([doc1_processed, doc2_processed])
+        similarity_score = float(cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])[0][0])
+        logging.info(f"Cosine similarity score: {similarity_score}")
+        return similarity_score
+
+    def evaluate_compliance(self, student_doc: str, template_doc: str, student_format: Dict, template_format: Dict, student_headings: List[str], template_headings: List[str]) -> Dict:
+        """Evaluate compliance based on text similarity, structure, and formatting."""
+        if not student_doc or not template_doc:
+            logging.error("Student document or template document is empty.")
+            return {}
+
+        """Evaluate compliance based on text similarity, structure, and formatting."""
+        similarity_score = self.calculate_similarity(student_doc, template_doc) if student_doc and template_doc else 0.0
+
         
-        # Create TF-IDF vectors
-        tfidf_matrix = self.vectorizer.fit_transform([doc1_processed, doc2_processed])
+        heading_match = len(set(student_headings).intersection(set(template_headings))) / max(1, len(template_headings))
+        font_overlap = len(student_format["fonts"].intersection(template_format["fonts"])) / max(1, len(template_format["fonts"]))
+        size_overlap = len(student_format["sizes"].intersection(template_format["sizes"])) / max(1, len(template_format["sizes"]))
+        alignment_match = student_format["alignments"] == template_format["alignments"]
+        formatting_score = (font_overlap + size_overlap + (1 if alignment_match else 0)) / 3
+        final_score = (similarity_score * 0.4) + (formatting_score * 0.3) + (heading_match * 0.3)
         
-        # Calculate cosine similarity
-        similarity_score = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])[0][0]
-        
-        # Get feature names (terms)
-        feature_names = self.vectorizer.get_feature_names_out()
-        
-        # Get important terms from both documents
-        doc1_terms = self._get_important_terms(tfidf_matrix[0], feature_names)
-        doc2_terms = self._get_important_terms(tfidf_matrix[1], feature_names)
-        
-        # Calculate shared terms
-        shared_terms = set(doc1_terms).intersection(set(doc2_terms))
-        
+        # Log formatting and heading comparison results
+        logging.info(f"Template headings: {template_headings}")
+        logging.info(f"Student headings: {student_headings}")
+        logging.info(f"Template formatting: {template_format}")
+        logging.info(f"Student formatting: {student_format}")
+
         return {
-            'similarity_score': float(similarity_score),
-            'similarity_percentage': float(similarity_score * 100),
-            'shared_terms': list(shared_terms),
-            'doc1_unique_terms': list(set(doc1_terms) - shared_terms),
-            'doc2_unique_terms': list(set(doc2_terms) - shared_terms),
-            'analysis': self._generate_analysis(similarity_score)
+            "text_similarity": similarity_score,
+            "heading_compliance": heading_match,
+            "formatting_compliance": formatting_score,
+            "final_compliance_score": final_score,
+            "is_compliant": final_score >= self.compliance_threshold
         }
 
-    def _get_important_terms(self, tfidf_vector, feature_names: np.ndarray, top_n: int = 10) -> List[str]:
-        """
-        Get the most important terms from a TF-IDF vector.
-        """
-        # Convert sparse matrix to dense array
-        dense_vector = tfidf_vector.toarray()[0]
-        
-        # Get indices of top N values
-        top_indices = dense_vector.argsort()[-top_n:][::-1]
-        
-        # Return corresponding terms
-        return [feature_names[i] for i in top_indices if dense_vector[i] > 0]
+    def save_model(self, vectorizer_path: str):
+        """Save the vectorizer to disk."""
+        with open(vectorizer_path, 'wb') as vec_file:
+            pkl.dump(self.vectorizer, vec_file)
 
-    def _generate_analysis(self, similarity_score: float) -> str:
-        """
-        Generate a human-readable analysis of the similarity score.
-        """
-        if similarity_score >= 0.9:
-            return "The documents are nearly identical"
-        elif similarity_score >= 0.7:
-            return "The documents are very similar"
-        elif similarity_score >= 0.5:
-            return "The documents share significant content"
-        elif similarity_score >= 0.3:
-            return "The documents have some similarities"
-        else:
-            return "The documents are substantially different"
+    def load_model(self, vectorizer_path: str):
+        """Load the vectorizer from disk."""
+        with open(vectorizer_path, 'rb') as vec_file:
+            self.vectorizer = pkl.load(vec_file)
 
-    def batch_compare(self, documents: List[str]) -> pd.DataFrame:
-        """
-        Compare multiple documents and return a similarity matrix.
-        """
-        # Preprocess all documents
-        processed_docs = [self.preprocess_text(doc) for doc in documents]
-        
-        # Create TF-IDF matrix
-        tfidf_matrix = self.vectorizer.fit_transform(processed_docs)
-        
-        # Calculate similarity matrix
-        similarity_matrix = cosine_similarity(tfidf_matrix)
-        
-        # Convert to DataFrame for better visualization
-        return pd.DataFrame(
-            similarity_matrix,
-            index=[f"Doc {i+1}" for i in range(len(documents))],
-            columns=[f"Doc {i+1}" for i in range(len(documents))]
-        )
+    def fit_vectorizer(self, corpus: List[str]):
+        """Fit the vectorizer to a corpus of documents."""
+        self.vectorizer.fit(corpus)
 
 # Example usage
 if __name__ == "__main__":
-    analyzer = DocumentSimilarityAnalyzer()
+    analyzer = DocumentComplianceAnalyzer()
+
+    # Fit the vectorizer with the template document and save it
+    template_path = Path("C:/Users/USER/Documents/submission guideline.docx")
+    template_text = analyzer.extract_text_from_docx(template_path)
+    analyzer.fit_vectorizer([template_text])  # Fit vectorizer to the template
+    analyzer.save_model("vectorizer.pkl")  # Save the fitted vectorizer
+
+    analyzer.save_model("vectorizer.pkl")  # Save the fitted vectorizer
+
+    analyzer.save_model("vectorizer.pkl")  # Save the fitted vectorizer
+
+    # Later, load the saved vectorizer and use it for evaluation
+    analyzer.load_model("vectorizer.pkl")  # Load the saved vectorizer
+    if not hasattr(analyzer.vectorizer, "vocabulary_"):
+            logging.error("TF-IDF vectorizer is not fitted. Please fit the vectorizer before using it.")
+            exit(1)
+
+
+
+    student_path = Path("C:/Users/USER/Documents/Quantum Machine Learning Advancing ICT for Sustainable Development.docx")
+    student_text = analyzer.extract_text_from_docx(student_path)
+    template_format = analyzer.extract_formatting_from_docx(template_path)
+    student_format = analyzer.extract_formatting_from_docx(student_path)
+    template_headings = analyzer.extract_headings_from_docx(template_path)
+    student_headings = analyzer.extract_headings_from_docx(student_path)
     
-    # Example documents
-    doc1 = """
-    The quick brown fox jumps over the lazy dog.
-    This is a common pangram used in typography.
-    """
+    compliance_result = analyzer.evaluate_compliance(student_text, template_text, student_format, template_format, student_headings, template_headings)
     
-    doc2 = """
-    The fast brown fox leaps over the sleepy dog.
-    This pangram is often used in font displays.
-    """
-    
-    # Calculate similarity with detailed analysis
-    result = analyzer.calculate_similarity(doc1, doc2)
-    
-    print(f"Similarity Score: {result['similarity_percentage']:.2f}%")
-    print(f"Analysis: {result['analysis']}")
-    print("\nShared Terms:", ', '.join(result['shared_terms']))
-    print("\nUnique to Doc1:", ', '.join(result['doc1_unique_terms']))
-    print("\nUnique to Doc2:", ', '.join(result['doc2_unique_terms']))
-    
-    # Example of batch comparison
-    documents = [
-        "The quick brown fox jumps over the lazy dog",
-        "The fast brown fox leaps over the sleepy dog",
-        "A completely different sentence about cats",
-    ]
-    
-    similarity_matrix = analyzer.batch_compare(documents)
-    print("\nSimilarity Matrix:")
-    print(similarity_matrix)
+    print(f"Final Compliance Score: {compliance_result['final_compliance_score']:.2f}")
+    print(f"Document is {'Compliant' if compliance_result['is_compliant'] else 'Non-Compliant'}")
