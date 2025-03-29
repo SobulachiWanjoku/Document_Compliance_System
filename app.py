@@ -1,12 +1,18 @@
 import os
 import logging
 from flask import Flask, render_template, request, redirect, url_for, flash
+from train_model import DocumentComplianceAnalyzer
+
+
 
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from utils import check_compliance
-from docx import Document
+from utils import check_compliance, load_vectorizer, extract_text_from_file
+
+
+from docx import Document  # Importing Document class for handling DOCX files
+
 
 from models import db, Template
 from flask_migrate import Migrate
@@ -64,7 +70,7 @@ def upload_file():
             template_path = os.path.join(app.config['UPLOAD_FOLDER'], template_filename)
             template_file.save(template_path)
 
-            # Log the template path being saved
+            logging.info(f"Saving template path: {template_path}")  # Log the template path being saved
             logging.info(f"Saving template path: {template_path}")
             
             # Save template in database
@@ -94,13 +100,24 @@ def upload_file():
                     template_text = f.read()
 
 
+            # Load the fitted vectorizer
+            vectorizer = load_vectorizer("vectorizer.pkl")
+
+            # Read student document text
+            student_text = extract_text_from_file(student_path)  # Ensure student_text is initialized
+            if student_text is None:
+                flash("Failed to extract text from the student file.", "error")
+                return redirect(url_for('upload_file'))
+
             # Compliance check
-            compliance_score, recommendations = check_compliance(template_text, student_path)
+            compliance_score, recommendations = check_compliance(template_text, student_text, vectorizer=vectorizer)
+
+
             return render_template('result.html', score=compliance_score, recommendations=recommendations)
 
         except Exception as e:
             logging.error(f"An error occurred during file upload: {str(e)}")
-            flash("An error occurred during file upload: " + str(e), "error")
+            flash("An error occurred during file upload. Please try again.", "error")
 
 
             return redirect(url_for('upload_file'))
@@ -189,7 +206,6 @@ def logout():
         flash('An error occurred during logout', 'error')
         return redirect(url_for('dashboard'))
 
-if __name__ == '__main__':
+   if __name__ == '__main__':
     with app.app_context():
-        db.create_all()  # Ensure database tables are created
     app.run(debug=True)

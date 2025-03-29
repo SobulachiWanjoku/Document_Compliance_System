@@ -24,12 +24,14 @@
             </div>
 
             <!-- Compliance Score Display -->
-            <p><strong>Score:</strong> <span id="score" class="score">{{ score }}%</span></p>
+            <p><strong>Score:</strong> <span id="score" class="score">{{ compliance_result.final_compliance_score * 100 }}%</span></p>
+
 
             <!-- Recommendations -->
             <h3>Recommendations:</h3>
             <ul>
-                {% for recommendation in recommendations %}
+                {% for recommendation in compliance_result.recommendations %}
+
                     <li>{{ recommendation }}</li>
                 {% endfor %}
             </ul>
