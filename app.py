@@ -2,18 +2,11 @@ import os
 import logging
 from flask import Flask, render_template, request, redirect, url_for, flash
 from train_model import DocumentComplianceAnalyzer
-
-
-
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from utils import check_compliance, load_vectorizer, extract_text_from_file
-
-
 from docx import Document  # Importing Document class for handling DOCX files
-
-
 from models import db, Template
 from flask_migrate import Migrate
 
@@ -28,6 +21,8 @@ app.config['ALLOWED_EXTENSIONS'] = {'pdf', 'docx'}
 # Initialize SQLAlchemy and Migrate
 db.init_app(app)
 migrate = Migrate(app, db)  # Migrate is initialized here (after db.init_app)
+# Instantiate the DocumentComplianceAnalyzer
+analyzer = DocumentComplianceAnalyzer()
 
 # Ensure upload folder exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -60,21 +55,35 @@ def upload_file():
             flash("Please select both files before uploading.", "error")
             return redirect(url_for('upload_file'))
 
-        if not allowed_file(template_file.filename) or not allowed_file(student_file.filename):
+        if not allowed_file(template_file.filename):
+            flash("Invalid template file type. Only PDF and DOCX files are allowed.", "error")
+            return redirect(url_for('upload_file'))
+        if not allowed_file(student_file.filename):
+            flash("Invalid student file type. Only PDF and DOCX files are allowed.", "error")
+            return redirect(url_for('upload_file'))
+
             flash("Invalid file type. Only PDF and DOCX files are allowed.", "error")
             return redirect(url_for('upload_file'))
 
         try:
+            # Check file size limits
+            if template_file.content_length > 16 * 1024 * 1024:  # 16 MB limit
+                flash("Template file is too large. Maximum size is 16 MB.", "error")
+                return redirect(url_for('upload_file'))
+            if student_file.content_length > 16 * 1024 * 1024:  # 16 MB limit
+                flash("Student file is too large. Maximum size is 16 MB.", "error")
+                return redirect(url_for('upload_file'))
+
             # Save template file
+
             template_filename = secure_filename(template_file.filename)
             template_path = os.path.join(app.config['UPLOAD_FOLDER'], template_filename)
             template_file.save(template_path)
 
             logging.info(f"Saving template path: {template_path}")  # Log the template path being saved
-            logging.info(f"Saving template path: {template_path}")
-            
-            # Save template in database
+            flash("Template file uploaded successfully.", "success")
 
+            # Save template in database
             new_template = Template(name=template_filename, path=template_path)  # Ensure 'path' column exists
             db.session.add(new_template)
             db.session.commit()
@@ -91,7 +100,6 @@ def upload_file():
                 return redirect(url_for('upload_file'))
 
             # Read template text
-            # Read template text
             if template.path.endswith('.docx'):
                 doc = Document(template.path)
                 template_text = "\n".join([para.text for para in doc.paragraphs])
@@ -99,9 +107,9 @@ def upload_file():
                 with open(template.path, "r", encoding="utf-8") as f:
                     template_text = f.read()
 
-
-            # Load the fitted vectorizer
-            vectorizer = load_vectorizer("vectorizer.pkl")
+            # Load the fitted vectorizer using DocumentComplianceAnalyzer
+            analyzer.load_model("vectorizer.pkl")
+            vectorizer = analyzer.vectorizer
 
             # Read student document text
             student_text = extract_text_from_file(student_path)  # Ensure student_text is initialized
@@ -110,16 +118,19 @@ def upload_file():
                 return redirect(url_for('upload_file'))
 
             # Compliance check
-            compliance_score, recommendations = check_compliance(template_text, student_text, vectorizer=vectorizer)
-
+            compliance_result = analyzer.evaluate_compliance(student_text, template_text, 
+                analyzer.extract_formatting_from_docx(student_path), 
+                analyzer.extract_formatting_from_docx(template_path), 
+                analyzer.extract_headings_from_docx(student_path), 
+                analyzer.extract_headings_from_docx(template_path))
+            compliance_score = compliance_result['final_compliance_score']
 
             return render_template('result.html', score=compliance_score, recommendations=recommendations)
 
         except Exception as e:
-            logging.error(f"An error occurred during file upload: {str(e)}")
-            flash("An error occurred during file upload. Please try again.", "error")
+            logging.error(f"An error occurred during file upload: {str(e)} - Template file: {template_file.filename}, Student file: {student_file.filename}")
 
-
+            flash("An unexpected error occurred. Please try again later.", "error")
             return redirect(url_for('upload_file'))
 
     return render_template('upload.html')
@@ -130,13 +141,11 @@ def gallery():
     """Displays all uploaded templates for the logged-in user."""
     try:
         templates = [template for template in Template.query.all() if os.path.exists(template.path)]
-
         return render_template('gallery.html', templates=templates)
     except Exception as e:
         logging.error(f"An error occurred while fetching templates: {str(e)}")
         flash("An error occurred while fetching templates. Please try again later.", "error")
         return redirect(url_for('dashboard'))
-
 
 class User(UserMixin):
     def __init__(self, username):
@@ -193,7 +202,6 @@ def delete_template(template_id):
     
     return redirect(url_for('gallery'))
 
-
 @app.route('/logout')
 @login_required
 def logout():
@@ -206,6 +214,6 @@ def logout():
         flash('An error occurred during logout', 'error')
         return redirect(url_for('dashboard'))
 
-   if __name__ == '__main__':
+if __name__ == '__main__':
     with app.app_context():
-    app.run(debug=True)
+        app.run(debug=True)
