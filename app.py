@@ -62,9 +62,6 @@ def upload_file():
             flash("Invalid student file type. Only PDF and DOCX files are allowed.", "error")
             return redirect(url_for('upload_file'))
 
-            flash("Invalid file type. Only PDF and DOCX files are allowed.", "error")
-            return redirect(url_for('upload_file'))
-
         try:
             # Check file size limits
             if template_file.content_length > 16 * 1024 * 1024:  # 16 MB limit
@@ -75,7 +72,6 @@ def upload_file():
                 return redirect(url_for('upload_file'))
 
             # Save template file
-
             template_filename = secure_filename(template_file.filename)
             template_path = os.path.join(app.config['UPLOAD_FOLDER'], template_filename)
             template_file.save(template_path)
