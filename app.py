@@ -113,7 +113,6 @@ def upload_file():
                 flash("Failed to extract text from the student file.", "error")
                 return redirect(url_for('upload_file'))
 
-            # Compliance check
             compliance_result = analyzer.evaluate_compliance(student_text, template_text, 
                 analyzer.extract_formatting_from_docx(student_path), 
                 analyzer.extract_formatting_from_docx(template_path), 
@@ -121,10 +120,13 @@ def upload_file():
                 analyzer.extract_headings_from_docx(template_path))
             compliance_score = compliance_result['final_compliance_score']
 
-            return render_template('result.html', score=compliance_score, recommendations=recommendations)
+            # Define recommendations based on compliance result
+            recommendations = compliance_result.get('recommendations', [])  # Ensure recommendations are retrieved
+
+            return render_template('result.html', compliance_result={'final_compliance_score': compliance_score, 'recommendations': recommendations})
 
         except Exception as e:
-            logging.error(f"An error occurred during file upload: {str(e)} - Template file: {template_file.filename}, Student file: {student_file.filename}")
+            logging.error(f"User: {current_user.id} - An error occurred during file upload: {str(e)} - Template file: {template_file.filename}, Student file: {student_file.filename}, Request: {request.method} {request.path}")
 
             flash("An unexpected error occurred. Please try again later.", "error")
             return redirect(url_for('upload_file'))
