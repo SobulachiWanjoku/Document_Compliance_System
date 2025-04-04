@@ -79,10 +79,19 @@ def upload_file():
             logging.info(f"Saving template path: {template_path}")  # Log the template path being saved
             flash("Template file uploaded successfully.", "success")
 
-            # Save template in database
-            new_template = Template(name=template_filename, path=template_path)  # Ensure 'path' column exists
-            db.session.add(new_template)
-            db.session.commit()
+            # Save template in database (check for duplicates first)
+            existing_template = Template.query.filter(
+                (Template.name == template_filename) | 
+                (Template.path == template_path)
+            ).first()
+            
+            if existing_template:
+                flash("This template already exists in the system.", "warning")
+            else:
+                new_template = Template(name=template_filename, path=template_path)
+                db.session.add(new_template)
+                db.session.commit()
+                flash("Template file uploaded successfully.", "success")
 
             # Save student file
             student_filename = secure_filename(student_file.filename)
