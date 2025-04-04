@@ -138,12 +138,31 @@ class DocumentComplianceAnalyzer:
         logging.info(f"Template formatting: {template_format}")
         logging.info(f"Student formatting: {student_format}")
 
+        # Generate recommendations based on compliance gaps
+        recommendations = []
+        
+        if similarity_score < 0.5:
+            recommendations.append("Improve content similarity with the template")
+        elif similarity_score < 0.7:
+            recommendations.append("Content could better match the template")
+            
+        if heading_match < 0.5:
+            recommendations.append("Add missing headings from the template")
+        elif heading_match < 0.7:
+            recommendations.append("Some headings don't match the template")
+            
+        if formatting_score < 0.5:
+            recommendations.append("Improve formatting to match the template")
+        elif formatting_score < 0.7:
+            recommendations.append("Some formatting doesn't match the template")
+
         return {
             "text_similarity": similarity_score,
             "heading_compliance": heading_match,
             "formatting_compliance": formatting_score,
             "final_compliance_score": final_score,
-            "is_compliant": final_score >= self.compliance_threshold
+            "is_compliant": final_score >= self.compliance_threshold,
+            "recommendations": recommendations
         }
 
     def save_model(self, vectorizer_path: str):
