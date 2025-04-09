@@ -105,3 +105,35 @@ button:hover {
     text-align: center;
     transition: background-color 0.3s ease-in-out;
 }
+
+/* Formatting Differences Section */
+.formatting-differences {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.original, .formatted {
+    width: 48%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.original h4, .formatted h4 {
+    color: #fff;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: monospace;
+    line-height: 1.4;
+}

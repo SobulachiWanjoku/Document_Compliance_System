@@ -48,8 +48,6 @@ class DocumentComplianceAnalyzer:
             logging.error(f"Error extracting text from {docx_path}: {e}")
             return ""
 
-            return ""
-
     def extract_headings_from_docx(self, docx_path: str) -> List[str]:
         """Extract headings from a Word document based on bold and capitalization."""
         try:
@@ -121,16 +119,33 @@ class DocumentComplianceAnalyzer:
             logging.error("Student document or template document is empty.")
             return {}
 
-        """Evaluate compliance based on text similarity, structure, and formatting."""
-        similarity_score = self.calculate_similarity(student_doc, template_doc) if student_doc and template_doc else 0.0
+        # First check if documents are exactly the same file
+        if student_doc == template_doc:
+            return {
+                "text_similarity": 1.0,
+                "heading_compliance": 1.0,
+                "formatting_compliance": 1.0,
+                "final_compliance_score": 1.0,
+                "is_compliant": True,
+                "recommendations": []
+            }
 
+        similarity_score = self.calculate_similarity(student_doc, template_doc) if student_doc and template_doc else 0.0
         
-        heading_match = len(set(student_headings).intersection(set(template_headings))) / max(1, len(template_headings))
-        font_overlap = len(student_format["fonts"].intersection(template_format["fonts"])) / max(1, len(template_format["fonts"]))
-        size_overlap = len(student_format["sizes"].intersection(template_format["sizes"])) / max(1, len(template_format["sizes"]))
-        alignment_match = student_format["alignments"] == template_format["alignments"]
-        formatting_score = (font_overlap + size_overlap + (1 if alignment_match else 0)) / 3
-        final_score = (similarity_score * 0.4) + (formatting_score * 0.3) + (heading_match * 0.3)
+        # If content is identical (>99% similarity), give full marks for content and headings
+        if similarity_score > 0.99:
+            heading_match = 1.0
+            formatting_score = (len(student_format["fonts"].intersection(template_format["fonts"])) / max(1, len(template_format["fonts"])) +
+                              len(student_format["sizes"].intersection(template_format["sizes"])) / max(1, len(template_format["sizes"])) +
+                              (1 if student_format["alignments"] == template_format["alignments"] else 0)) / 3
+            final_score = 0.4 + (formatting_score * 0.3) + 0.3  # Full marks for content and headings
+        else:
+            heading_match = len(set(student_headings).intersection(set(template_headings))) / max(1, len(template_headings))
+            font_overlap = len(student_format["fonts"].intersection(template_format["fonts"])) / max(1, len(template_format["fonts"]))
+            size_overlap = len(student_format["sizes"].intersection(template_format["sizes"])) / max(1, len(template_format["sizes"]))
+            alignment_match = student_format["alignments"] == template_format["alignments"]
+            formatting_score = (font_overlap + size_overlap + (1 if alignment_match else 0)) / 3
+            final_score = (similarity_score * 0.4) + (formatting_score * 0.3) + (heading_match * 0.3)
         
         # Log formatting and heading comparison results
         logging.info(f"Template headings: {template_headings}")
@@ -187,10 +202,6 @@ if __name__ == "__main__":
     template_path = Path("C:/Users/USER/Documents/submission guideline.docx")
     template_text = analyzer.extract_text_from_docx(template_path)
     analyzer.fit_vectorizer([template_text])  # Fit vectorizer to the template
-    analyzer.save_model("vectorizer.pkl")  # Save the fitted vectorizer
-
-    analyzer.save_model("vectorizer.pkl")  # Save the fitted vectorizer
-
     analyzer.save_model("vectorizer.pkl")  # Save the fitted vectorizer
 
     # Later, load the saved vectorizer and use it for evaluation

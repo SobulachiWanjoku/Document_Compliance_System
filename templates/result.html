@@ -26,15 +26,28 @@
             <!-- Compliance Score Display -->
             <p><strong>Score:</strong> <span id="score" class="score">{{ compliance_result.final_compliance_score * 100 }}%</span></p>
 
-
             <!-- Recommendations -->
             <h3>Recommendations:</h3>
             <ul>
                 {% for recommendation in compliance_result.recommendations %}
-
                     <li>{{ recommendation }}</li>
                 {% endfor %}
             </ul>
+
+            <!-- Formatting Differences -->
+            {% if compliance_result.formatting_differences %}
+            <h3>Formatting Differences:</h3>
+            <div class="formatting-differences">
+                <div class="original">
+                    <h4>Original Formatting</h4>
+                    <pre>{{ compliance_result.formatting_differences.original }}</pre>
+                </div>
+                <div class="formatted">
+                    <h4>Formatted Output</h4>
+                    <pre>{{ compliance_result.formatting_differences.formatted }}</pre>
+                </div>
+            </div>
+            {% endif %}
 
             <!-- Buttons -->
             <div class="button-group">
