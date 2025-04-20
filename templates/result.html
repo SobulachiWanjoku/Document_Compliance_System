@@ -37,13 +37,13 @@
             <!-- Formatting Differences -->
             {% if compliance_result.formatting_differences %}
             <h3>Formatting Differences:</h3>
-            <div class="formatting-differences">
-                <div class="original">
-                    <h4>Original Formatting</h4>
+            <div class="formatting-differences" style="border: 1px solid #ccc; font-family: monospace; padding: 10px; border-radius: 3px;">
+                <div class="original" style="margin-bottom: 1em;">
+                    <h4>Template Formatting</h4>
                     <pre>{{ compliance_result.formatting_differences.original }}</pre>
                 </div>
                 <div class="formatted">
-                    <h4>Formatted Output</h4>
+                    <h4>Student Formatting</h4>
                     <pre>{{ compliance_result.formatting_differences.formatted }}</pre>
                 </div>
             </div>
