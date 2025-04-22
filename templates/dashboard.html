@@ -4,22 +4,123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document Compliance Checker</title>
-    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: space-around;
+            list-style-type: none;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #555;
+            border-radius: 4px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(to right, #1e3c72, #f953c6);
+            padding: 3rem;
+            text-align: center;
+        }
+
+        /* Content Sections */
+        section {
+            padding: 2rem;
+            margin: 1rem auto;
+            max-width: 1200px;
+        }
+
+        section:nth-child(even) {
+            background: linear-gradient(to right, #1e3c72, #f953c6);
+        }
+
+        h1, h2 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+    </style>
+
 </head>
 <body>
-        
+     <!-- Navigation Bar -->
+     <nav>
+        <ul>
+            <li> <a href="{{ url_for('upload_file') }}" class="button">Upload Documents</a></li>
+            <li><a href="about.html" class="button">About</a></li>
+            <li><a href="{{ url_for('gallery') }}" class="button">Template Gallery</a></li>
+        </ul>
+    </nav>
+
+        <!--Hero Section-->
     <section class="hero">
             <h1>Welcome to Document Compliance Checker</h1>
             <p>
-                Our system ensures your documents meet the required standards and provides actionable 
-                recommendations to improve compliance.
-            </p>
-            
-            <div class="hero-buttons">
-                <a href="{{ url_for('upload_file') }}" class="button">Upload Documents</a>
-                <a href="{{ url_for('gallery') }}" class="button">Template Gallery</a>
-            </div>
-        </div>
+            Our system ensures your documents meet the required standards and provides actionable recommendations to improve compliance.
+            </p>            
+    </section>
+
+    <!-- What We Do Sections -->
+    <section id="what-we-do">
+        <h2>What We Do</h2>
+        <p>Our website provides innovative solutions to help you ensure your documents adhere to your given templates. We combine cutting-edge technology with user-friendly design to deliver exceptional value to our customers.</p>
+    </section>
+
+    <section id="features">
+        <h2>Our Features</h2>
+        <p><strong>Compliance Checker:</strong>Our System uses advanced machine learning, template matching and optical character recognition technology to calculate how well your document complies with the template.</p>
+        <p><strong>Machine learning</strong>Our system uses an advanced machine learning algorithm to calculate compliance scores for you. It assigns a weight of 30%,30%,40% to your document's heading, formatting and content similarity respectively</p>
+        <p><strong>Optical Character Recognition</strong>Our system uses OCR technology to "read" your document and compare it to the template. Do note that only docx and pdf files can be uploaded</p>
+    </section>
+
+    <section id="how-it-works">
+        <h2>How It Works</h2>
+        <p>Our process is simple and straightforward:</p>
+        <ol>
+            <li>Sign up for an account</li>
+            <li>Upload your template</li>
+            <li>Upload your file</li>
+            <li>Hit the Check compliance button</li>
+            <li>Sit back and wait for our model to give you your compliance score.</li>
+        </ol>
     </section>
 </body>
 </html>
