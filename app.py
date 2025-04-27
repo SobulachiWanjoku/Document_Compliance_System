@@ -8,15 +8,24 @@ from werkzeug.utils import secure_filename
 from utils import check_compliance, load_vectorizer, extract_text_from_file
 from docx import Document  # Importing Document class for handling DOCX files
 from models import db, Template
+from models import User as UserModel
 from flask_migrate import Migrate
-
+from datetime import timedelta
 # Initialize Flask app
+
+
 app = Flask(__name__)
 app.secret_key = 'SobulachiWanjoku'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///templates.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'pdf', 'docx'}
+
+# Session expiration and cookie security settings
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)  # Session expires after 30 minutes of inactivity
+app.config['SESSION_COOKIE_SECURE'] = True  # Cookie sent only over HTTPS
+app.config['SESSION_COOKIE_HTTPONLY'] = True  # Cookie not accessible via JavaScript
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Helps prevent CSRF
 
 # Initialize SQLAlchemy and Migrate
 db.init_app(app)
@@ -33,7 +42,7 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 
 # Sample user data (Use a database in production)
-users = {"admin": generate_password_hash("password123")}
+# users = {"admin": generate_password_hash("password123")}  # Commented out as we will use DB for users
 
 # Helper function to check file extensions
 def allowed_file(filename):
@@ -173,19 +182,21 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User(user_id) if user_id in users else None
+    return UserModel.query.get(user_id)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        
-        if username in users and check_password_hash(users[username], password):
-            user = User(username)
+
+        user = UserModel.query.filter_by(username=username).first()
+        if user and user.check_password(password):
             login_user(user)
+            # Mark session as permanent to enable session timeout
+            session.permanent = True
             return redirect(url_for('dashboard'))
-        
+
         flash("Invalid username or password", "error")
     return render_template('login.html', title="Login")
 
@@ -193,6 +204,40 @@ def login():
 @login_required
 def dashboard():
     return render_template('dashboard.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+
+        # Basic validation
+        if not username or not email or not password or not confirm_password:
+            flash('Please fill out all fields.', 'error')
+            return render_template('register.html')
+
+        if password != confirm_password:
+            flash('Passwords do not match.', 'error')
+            return render_template('register.html')
+
+        # Check if username or email already exists
+        existing_user = UserModel.query.filter((UserModel.username == username) | (UserModel.email == email)).first()
+        if existing_user:
+            flash('Username or email already exists.', 'error')
+            return render_template('register.html')
+
+        # Create new user
+        new_user = UserModel(username=username, email=email)
+        new_user.set_password(password)
+        db.session.add(new_user)
+        db.session.commit()
+
+        flash('Registration successful! Please log in.', 'success')
+        return redirect(url_for('login'))
+
+    return render_template('register.html')
 
 @app.route('/delete_template/<int:template_id>', methods=['POST'])
 @login_required
