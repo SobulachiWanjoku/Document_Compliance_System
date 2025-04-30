@@ -1,6 +1,6 @@
 import os
 import logging
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from train_model import DocumentComplianceAnalyzer
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -22,7 +22,7 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'pdf', 'docx'}
 
 # Session expiration and cookie security settings
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)  # Session expires after 30 minutes of inactivity
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)  # Session expires after 10 minutes of inactivity
 app.config['SESSION_COOKIE_SECURE'] = True  # Cookie sent only over HTTPS
 app.config['SESSION_COOKIE_HTTPONLY'] = True  # Cookie not accessible via JavaScript
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Helps prevent CSRF
