@@ -205,6 +205,11 @@ def login():
 def dashboard():
     return render_template('dashboard.html')
 
+@app.route('/about')
+@login_required
+def about():
+    return render_template('about.html')
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':

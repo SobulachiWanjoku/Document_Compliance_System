@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Compliance Checker</title>
+    <link rel="stylesheet" href="/static/styles.css">
+
+</head>
+<body>
+     <!-- Navigation Bar -->
+<nav>
+        <ul>
+            <li><a href="{{ url_for('dashboard') }}" class="button">Home</a></li>
+            <li> <a href="{{ url_for('upload_file') }}" class="button">Upload Documents</a></li>
+            <li><a href="{{ url_for('gallery') }}" class="button">Template Gallery</a></li>
+            <li><p>About</p></li>
+            <li><a href="{{ url_for('logout') }}" class="button">Logout</a></li>
+        </ul>
+    </nav>
+
+        <!--Hero Section-->
+    <section class="hero">
+            <h1>About the Document Compliance Checker</h1>
+            <p>
+            Our system ensures your documents meet the required standards and provides actionable recommendations to improve compliance.
+            </p>            
+    </section>
+
+    <!-- What We Do Sections -->
+
+    <section id="how-it-works">
+        <h2>How It Works</h2>
+        <p>Our process is simple and straightforward:</p>
+        <ol>
+            <li>Sign up for an account</li>
+            <li>Upload your template</li>
+            <li>Upload your file</li>
+            <li>Hit the Check compliance button</li>
+            <li>Sit back and wait for our model to give you your compliance score.</li>
+        </ol>
+    </section>
+</body>
+</html>
