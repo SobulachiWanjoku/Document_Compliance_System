@@ -1,6 +1,7 @@
 import os
 import logging
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from logging.handlers import RotatingFileHandler
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from train_model import DocumentComplianceAnalyzer
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -11,6 +12,8 @@ from models import db, Template
 from models import User as UserModel
 from flask_migrate import Migrate
 from datetime import timedelta
+import re
+from markupsafe import escape
 # Initialize Flask app
 
 
@@ -26,6 +29,17 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)  # Session expi
 app.config['SESSION_COOKIE_SECURE'] = True  # Cookie sent only over HTTPS
 app.config['SESSION_COOKIE_HTTPONLY'] = True  # Cookie not accessible via JavaScript
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Helps prevent CSRF
+
+# Configure logging
+if not os.path.exists('logs'):
+    os.mkdir('logs')
+log_handler = RotatingFileHandler('logs/error.log', maxBytes=10240, backupCount=10)
+log_formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]')
+log_handler.setFormatter(log_formatter)
+log_handler.setLevel(logging.INFO)
+app.logger.addHandler(log_handler)
+app.logger.setLevel(logging.INFO)
+app.logger.info('Application startup')
 
 # Initialize SQLAlchemy and Migrate
 db.init_app(app)
@@ -80,12 +94,15 @@ def upload_file():
                 flash("Student file is too large. Maximum size is 16 MB.", "error")
                 return redirect(url_for('upload_file'))
 
-            # Save template file
+            # Sanitize filenames
             template_filename = secure_filename(template_file.filename)
+            student_filename = secure_filename(student_file.filename)
+
+            # Save template file
             template_path = os.path.join(app.config['UPLOAD_FOLDER'], template_filename)
             template_file.save(template_path)
 
-            logging.info(f"Saving template path: {template_path}")  # Log the template path being saved
+            app.logger.info(f"Saving template path: {template_path}")  # Log the template path being saved
             flash("Template file uploaded successfully.", "success")
 
             # Save template in database (check for duplicates first)
@@ -103,7 +120,6 @@ def upload_file():
                 flash("Template file uploaded successfully.", "success")
 
             # Save student file
-            student_filename = secure_filename(student_file.filename)
             student_path = os.path.join(app.config['UPLOAD_FOLDER'], student_filename)
             student_file.save(student_path)
 
@@ -157,7 +173,7 @@ def upload_file():
 
 
         except Exception as e:
-            logging.error(f"User: {current_user.id} - An error occurred during file upload: {str(e)} - Template file: {template_file.filename}, Student file: {student_file.filename}, Request: {request.method} {request.path}")
+            app.logger.error(f"User: {current_user.id} - An error occurred during file upload: {str(e)} - Template file: {template_file.filename}, Student file: {student_file.filename}, Request: {request.method} {request.path}")
 
             flash("An unexpected error occurred. Please try again later.", "error")
             return redirect(url_for('upload_file'))
@@ -172,7 +188,7 @@ def gallery():
         templates = [template for template in Template.query.all() if os.path.exists(template.path)]
         return render_template('gallery.html', templates=templates)
     except Exception as e:
-        logging.error(f"An error occurred while fetching templates: {str(e)}")
+        app.logger.error(f"An error occurred while fetching templates: {str(e)}")
         flash("An error occurred while fetching templates. Please try again later.", "error")
         return redirect(url_for('dashboard'))
 
@@ -189,6 +205,14 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+
+        # Input validation
+        if not username or not password:
+            flash("Username and password are required.", "error")
+            return render_template('login.html', title="Login")
+
+        # Sanitize inputs
+        username = escape(username)
 
         user = UserModel.query.filter_by(username=username).first()
         if user and user.check_password(password):
@@ -218,9 +242,21 @@ def register():
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
 
-        # Basic validation
+        # Input validation
         if not username or not email or not password or not confirm_password:
             flash('Please fill out all fields.', 'error')
+            return render_template('register.html')
+
+        # Validate email format
+        email_regex = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+        if not re.match(email_regex, email):
+            flash('Invalid email format.', 'error')
+            return render_template('register.html')
+
+        # Validate password strength (min 8 chars, at least one number and one letter)
+        password_regex = r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$'
+        if not re.match(password_regex, password):
+            flash('Password must be at least 8 characters long and contain both letters and numbers.', 'error')
             return render_template('register.html')
 
         if password != confirm_password:
@@ -234,7 +270,7 @@ def register():
             return render_template('register.html')
 
         # Create new user
-        new_user = UserModel(username=username, email=email)
+        new_user = UserModel(username=escape(username), email=escape(email))
         new_user.set_password(password)
         db.session.add(new_user)
         db.session.commit()
@@ -247,22 +283,27 @@ def register():
 @app.route('/delete_template/<int:template_id>', methods=['POST'])
 @login_required
 def delete_template(template_id):
+    # Validate template_id
+    if not isinstance(template_id, int) or template_id <= 0:
+        flash("Invalid template ID.", "error")
+        return redirect(url_for('gallery'))
+
     template = Template.query.get(template_id)
     
     if not template:
         flash("Template not found.", "error")
         return redirect(url_for('gallery'))
     
-    logging.info(f"Attempting to delete template at path: {template.path}")
+    app.logger.info(f"Attempting to delete template at path: {template.path}")
 
     if template.path:
         try:
             if os.path.exists(template.path):
                 os.remove(template.path)  # Delete file from storage
             else:
-                logging.warning(f"File not found: {template.path}")
+                app.logger.warning(f"File not found: {template.path}")
         except Exception as e:
-            logging.error(f"Error deleting file: {str(e)}")
+            app.logger.error(f"Error deleting file: {str(e)}")
             flash("An error occurred while deleting the template file.", "error")
             return redirect(url_for('gallery'))
     
@@ -281,8 +322,20 @@ def logout():
         flash('You have been successfully logged out', 'success')
         return redirect(url_for('login'))
     except Exception as e:
+        app.logger.error(f"An error occurred during logout: {str(e)}")
         flash('An error occurred during logout', 'error')
         return redirect(url_for('dashboard'))
+
+# Centralized error handler to avoid exposing sensitive info
+@app.errorhandler(500)
+def internal_error(error):
+    app.logger.error(f"Server Error: {error}, Path: {request.path}, Method: {request.method}")
+    return render_template('error.html', message="An unexpected error occurred. Please try again later."), 500
+
+@app.errorhandler(Exception)
+def unhandled_exception(e):
+    app.logger.error(f"Unhandled Exception: {e}, Path: {request.path}, Method: {request.method}")
+    return render_template('error.html', message="An unexpected error occurred. Please try again later."), 500
 
 if __name__ == '__main__':
     with app.app_context():
