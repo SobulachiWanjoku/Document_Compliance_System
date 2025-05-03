@@ -356,6 +356,13 @@ def unhandled_exception(e):
     app.logger.error(f"Unhandled Exception: {e}, Path: {request.path}, Method: {request.method}")
     return render_template('error.html', message="An unexpected error occurred. Please try again later."), 500
 
+@app.errorhandler(404)
+def not_found_error(error):
+    if request.path == '/favicon.ico':
+        app.logger.warning(f"Favicon not found: {request.path}")
+        return '', 204  # No Content response to suppress error
+    return render_template('error.html', message="Page not found."), 404
+
 if __name__ == '__main__':
     with app.app_context():
         app.run(debug=True)

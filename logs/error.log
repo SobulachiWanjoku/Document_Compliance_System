@@ -37,3 +37,4 @@
 2025-05-02 14:19:01,148 ERROR: User: 1 - An error occurred during file upload: 'final_compliance_score' - Template file: Literature Review .docx, Student file: Software reverse engineering summary.docx, Request: POST /upload [in C:\Users\USER\Documents\Document_Compliance_System\app.py:176]
 2025-05-02 14:19:01,334 ERROR: Unhandled Exception: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again., Path: /favicon.ico, Method: GET [in C:\Users\USER\Documents\Document_Compliance_System\app.py:337]
 2025-05-02 14:19:33,169 INFO: Saving template path: uploads\Development_of_a_Finance_management_System_project_proposal.docx [in C:\Users\USER\Documents\Document_Compliance_System\app.py:105]
+2025-05-03 09:03:50,592 INFO: Application startup [in C:\Users\USER\Documents\Document_Compliance_System\app.py:42]
