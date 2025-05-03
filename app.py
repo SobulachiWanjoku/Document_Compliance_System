@@ -149,15 +149,34 @@ def upload_file():
 
             student_formatting = analyzer.extract_formatting_from_docx(student_path)
             template_formatting = analyzer.extract_formatting_from_docx(template_path)
+            if not template_text:
+                app.logger.error("Template text is empty. Cannot evaluate compliance.")
+                flash("Template text is empty. Please upload a valid template file.", "error")
+                return redirect(url_for('upload_file'))
+
+            if not student_text:
+                app.logger.error("Student text is empty. Cannot evaluate compliance.")
+                flash("Student file text extraction failed. Please upload a valid student file.", "error")
+                return redirect(url_for('upload_file'))
+
             compliance_result = analyzer.evaluate_compliance(student_text, template_text, 
                 student_formatting, 
                 template_formatting, 
                 analyzer.extract_headings_from_docx(student_path), 
                 analyzer.extract_headings_from_docx(template_path))
-            compliance_score = compliance_result['final_compliance_score']
 
-            # Define recommendations based on compliance result
-            recommendations = compliance_result.get('recommendations', [])  # Ensure recommendations are retrieved
+            if not compliance_result:
+                app.logger.error(f"Compliance evaluation returned empty result: {compliance_result}")
+                flash("Failed to evaluate compliance. Please check the uploaded documents.", "error")
+                return redirect(url_for('upload_file'))
+
+            try:
+                compliance_score = compliance_result['final_compliance_score']
+                recommendations = compliance_result.get('recommendations', [])
+            except KeyError as e:
+                app.logger.error(f"KeyError accessing compliance_result: {e}, compliance_result content: {compliance_result}")
+                flash("An error occurred during compliance evaluation. Please try again.", "error")
+                return redirect(url_for('upload_file'))
 
             # Pass formatting differences as text for display
             formatting_differences = {
