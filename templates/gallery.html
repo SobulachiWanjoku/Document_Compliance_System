@@ -33,6 +33,7 @@
         {% for template in templates %}
             <li>
                 {{ template.name }}
+                <a href="{{ url_for('reuse_template', template_id=template.id) }}" class="button">Reuse</a>
                 <form action="{{ url_for('delete_template', template_id=template.id) }}" method="POST" style="display:inline;">
                     <button type="submit">Delete</button>
                 </form>

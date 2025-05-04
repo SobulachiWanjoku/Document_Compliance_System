@@ -38,7 +38,11 @@
                 <form action="/upload" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="template">Template File:</label>
-                        <input type="file" id="template" name="template" required>
+                        <input type="file" id="template" name="template" {% if preloaded_template %} disabled {% else %} required {% endif %}>
+                        {% if preloaded_template %}
+                            <p>Using template: {{ preloaded_template.name }}</p>
+                            <input type="hidden" name="preloaded_template_id" value="{{ preloaded_template.id }}">
+                        {% endif %}
                     </div>
                     <div class="form-group">
                         <label for="student_file">Student File:</label>

@@ -70,6 +70,15 @@ def home():
 @login_required
 def upload_file():
     """Handle file upload and compliance checking"""
+    template_id = request.args.get('template_id', type=int)
+    preloaded_template = None
+
+    if template_id:
+        preloaded_template = Template.query.get(template_id)
+        if not preloaded_template or not os.path.exists(preloaded_template.path):
+            flash("Selected template not found or file missing.", "error")
+            return redirect(url_for('gallery'))
+
     if request.method == 'POST':
         template_file = request.files.get('template')
         student_file = request.files.get('student_file')
@@ -197,7 +206,7 @@ def upload_file():
             flash("An unexpected error occurred. Please try again later.", "error")
             return redirect(url_for('upload_file'))
 
-    return render_template('upload.html')
+    return render_template('upload.html', preloaded_template=preloaded_template)
 
 @app.route('/gallery')
 @login_required
@@ -210,6 +219,17 @@ def gallery():
         app.logger.error(f"An error occurred while fetching templates: {str(e)}")
         flash("An error occurred while fetching templates. Please try again later.", "error")
         return redirect(url_for('dashboard'))
+
+@app.route('/reuse_template/<int:template_id>')
+@login_required
+def reuse_template(template_id):
+    """Handle reuse of a selected template by redirecting to upload with template preloaded."""
+    template = Template.query.get(template_id)
+    if not template or not os.path.exists(template.path):
+        flash("Template not found or file missing.", "error")
+        return redirect(url_for('gallery'))
+    # Redirect to upload page with template_id as query parameter
+    return redirect(url_for('upload_file', template_id=template_id))
 
 class User(UserMixin):
     def __init__(self, username):
