@@ -55,8 +55,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-# Sample user data (Use a database in production)
-# users = {"admin": generate_password_hash("password123")}  # Commented out as we will use DB for users
 
 # Helper function to check file extensions
 def allowed_file(filename):
