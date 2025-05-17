@@ -56,6 +56,7 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 
 
+
 # Helper function to check file extensions
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
