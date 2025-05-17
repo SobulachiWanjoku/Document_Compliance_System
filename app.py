@@ -79,23 +79,37 @@ def upload_file():
             return redirect(url_for('gallery'))
 
     if request.method == 'POST':
+        preloaded_template_id = request.form.get('preloaded_template_id', type=int)
         template_file = request.files.get('template')
         student_file = request.files.get('student_file')
 
-        if not template_file or not student_file:
-            flash("Please select both files before uploading.", "error")
+        if not student_file:
+            flash("Please select the student file before uploading.", "error")
             return redirect(url_for('upload_file'))
 
-        if not allowed_file(template_file.filename):
-            flash("Invalid template file type. Only PDF and DOCX files are allowed.", "error")
-            return redirect(url_for('upload_file'))
+        if preloaded_template_id:
+            # Use preloaded template from database
+            template = Template.query.get(preloaded_template_id)
+            if not template or not os.path.exists(template.path):
+                flash("Selected template not found or file missing.", "error")
+                return redirect(url_for('upload_file'))
+        else:
+            # Require template file upload
+            if not template_file:
+                flash("Please select the template file before uploading.", "error")
+                return redirect(url_for('upload_file'))
+
+            if not allowed_file(template_file.filename):
+                flash("Invalid template file type. Only PDF and DOCX files are allowed.", "error")
+                return redirect(url_for('upload_file'))
+
         if not allowed_file(student_file.filename):
             flash("Invalid student file type. Only PDF and DOCX files are allowed.", "error")
             return redirect(url_for('upload_file'))
 
         try:
             # Check file size limits
-            if template_file.content_length > 16 * 1024 * 1024:  # 16 MB limit
+            if not preloaded_template_id and template_file.content_length > 16 * 1024 * 1024:  # 16 MB limit
                 flash("Template file is too large. Maximum size is 16 MB.", "error")
                 return redirect(url_for('upload_file'))
             if student_file.content_length > 16 * 1024 * 1024:  # 16 MB limit
@@ -103,39 +117,48 @@ def upload_file():
                 return redirect(url_for('upload_file'))
 
             # Sanitize filenames
-            template_filename = secure_filename(template_file.filename)
-            student_filename = secure_filename(student_file.filename)
+            if preloaded_template_id:
+                template_filename = None
+                template_path = None
+            else:
+                template_filename = secure_filename(template_file.filename)
+                template_path = os.path.join(app.config['UPLOAD_FOLDER'], template_filename)
+                template_file.save(template_path)
+                app.logger.info(f"Saving template path: {template_path}")  # Log the template path being saved
 
-            # Save template file
-            template_path = os.path.join(app.config['UPLOAD_FOLDER'], template_filename)
-            template_file.save(template_path)
-
-            app.logger.info(f"Saving template path: {template_path}")  # Log the template path being saved
             flash("Template file uploaded successfully.", "success")
 
             # Save template in database (check for duplicates first)
-            existing_template = Template.query.filter(
-                (Template.name == template_filename) | 
-                (Template.path == template_path)
-            ).first()
-            
-            if existing_template:
-                flash("This template already exists in the system.", "warning")
-            else:
-                new_template = Template(name=template_filename, path=template_path)
-                db.session.add(new_template)
-                db.session.commit()
-                flash("Template file uploaded successfully.", "success")
+            if not preloaded_template_id:
+                existing_template = Template.query.filter(
+                    (Template.name == template_filename) | 
+                    (Template.path == template_path)
+                ).first()
+                
+                if existing_template:
+                    flash("This template already exists in the system.", "warning")
+                else:
+                    new_template = Template(name=template_filename, path=template_path)
+                    db.session.add(new_template)
+                    db.session.commit()
+                    flash("Template file uploaded successfully.", "success")
 
             # Save student file
+            student_filename = secure_filename(student_file.filename)
             student_path = os.path.join(app.config['UPLOAD_FOLDER'], student_filename)
             student_file.save(student_path)
 
-            # Retrieve latest template
-            template = Template.query.order_by(Template.id.desc()).first()
-            if not template:
-                flash("No templates found in the database.", "error")
-                return redirect(url_for('upload_file'))
+            # Retrieve template
+            if preloaded_template_id:
+                template = Template.query.get(preloaded_template_id)
+                if not template or not os.path.exists(template.path):
+                    flash("Selected template not found or file missing.", "error")
+                    return redirect(url_for('upload_file'))
+            else:
+                template = Template.query.order_by(Template.id.desc()).first()
+                if not template:
+                    flash("No templates found in the database.", "error")
+                    return redirect(url_for('upload_file'))
 
             # Read template text
             if template.path.endswith('.docx'):
@@ -156,7 +179,7 @@ def upload_file():
                 return redirect(url_for('upload_file'))
 
             student_formatting = analyzer.extract_formatting_from_docx(student_path)
-            template_formatting = analyzer.extract_formatting_from_docx(template_path)
+            template_formatting = analyzer.extract_formatting_from_docx(template.path)
             if not template_text:
                 app.logger.error("Template text is empty. Cannot evaluate compliance.")
                 flash("Template text is empty. Please upload a valid template file.", "error")
@@ -171,7 +194,7 @@ def upload_file():
                 student_formatting, 
                 template_formatting, 
                 analyzer.extract_headings_from_docx(student_path), 
-                analyzer.extract_headings_from_docx(template_path))
+                analyzer.extract_headings_from_docx(template.path))
 
             if not compliance_result:
                 app.logger.error(f"Compliance evaluation returned empty result: {compliance_result}")
@@ -200,7 +223,7 @@ def upload_file():
 
 
         except Exception as e:
-            app.logger.error(f"User: {current_user.id} - An error occurred during file upload: {str(e)} - Template file: {template_file.filename}, Student file: {student_file.filename}, Request: {request.method} {request.path}")
+            app.logger.error(f"User: {current_user.id} - An error occurred during file upload: {str(e)} - Template file: {template_file.filename if template_file else 'N/A'}, Student file: {student_file.filename if student_file else 'N/A'}, Request: {request.method} {request.path}")
 
             flash("An unexpected error occurred. Please try again later.", "error")
             return redirect(url_for('upload_file'))
