@@ -36,10 +36,10 @@ nav a:hover {
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(to right, #7e7e7e, #212121);
+    background: #441D49;
     padding: 3rem;
     text-align: center;
-    color: white
+    color: #FAFFFD
 }
 
 /* Content Sections */

@@ -32,3 +32,6 @@
 2025-05-20 15:08:05,558 WARNING: Favicon not found: /favicon.ico [in C:\Users\USER\Documents\Document_Compliance_System\app.py:404]
 2025-05-20 15:08:18,230 WARNING: Favicon not found: /favicon.ico [in C:\Users\USER\Documents\Document_Compliance_System\app.py:404]
 2025-05-20 15:13:07,872 WARNING: Favicon not found: /favicon.ico [in C:\Users\USER\Documents\Document_Compliance_System\app.py:404]
+2025-05-20 21:41:12,161 INFO: Application startup [in C:\Users\USER\Documents\Document_Compliance_System\app.py:42]
+2025-05-20 21:41:49,099 INFO: Application startup [in C:\Users\USER\Documents\Document_Compliance_System\app.py:42]
+2025-05-20 21:41:52,238 INFO: Application startup [in C:\Users\USER\Documents\Document_Compliance_System\app.py:42]
