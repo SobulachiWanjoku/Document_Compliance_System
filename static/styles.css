@@ -134,6 +134,7 @@ nav a:hover {
     width: 150px;
     padding: 12px;
     border: none;
+    border-radius: 25px;
     margin-top: 5px;
     background: #3a3838;
     color: #fff;
@@ -147,6 +148,7 @@ button {
     width: 150px;
     padding: 12px;
     border: none;
+    border-radius: 25px;
     margin-top: 10px;
     background: #3a3838;
     color: #fff;
