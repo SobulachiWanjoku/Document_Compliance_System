@@ -1,4 +1,3 @@
-
 * {
     margin: 0;
     padding: 0;
@@ -8,10 +7,11 @@
 
 /* Navigation Bar */
 nav {
-    background-color: #333;
-    color: white;
-    padding: 1rem;
+    background-color: #70798C;
+    color: #FAFFFD;
+    padding: 10px;
     position: sticky;
+    margin: 0;
     top: 0;
     z-index: 100;
 }
@@ -23,9 +23,9 @@ nav ul {
 }
 
 nav a {
-    color: white;
+    color: #FAFFFD;
     text-decoration: none;
-    padding: 0.5rem 1rem;
+    padding: 5px;
     transition: all 0.3s ease;
 }
 
@@ -36,28 +36,35 @@ nav a:hover {
 
 /* Hero Section */
 .hero {
-    background: #441D49;
+    background: #0C1618;
     padding: 3rem;
-    text-align: center;
     color: #FAFFFD
 }
 
 /* Content Sections */
 section {
-    background: linear-gradient(to right, #7e7e7e, #212121);
+    background: #0C1618;
+    padding: 2rem;
     margin: 1rem auto;
     max-width: 1200px;
-    color:white 
+    color: #FAFFFD;
 }
 
 section:nth-child(even) {
-    background: linear-gradient(to right, #7e7e7e, #212121);
+    background: #0C1618;
 }
 
 h1, h2 {
-    color: #fff;
-    font-size: 24px;
-    margin-bottom: 20px;
+    color: #FAFFFD;
+    text-decoration: none;
+    padding: 5px;
+    transition: all 0.3s ease;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    margin-top: 10px;
 }
 
 p {
@@ -65,37 +72,16 @@ p {
     margin-bottom: 1rem;
 }
 
-
-/* Apply full-screen gradient background */
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #7e7e7e, #212121);
-    margin: 0;
-}
-/* Content Sections */
-section {
-    padding: 2rem;
-    margin: 1rem auto;
-    max-width: 1200px;
+    background: #0C1618;
 }
 
-nav ul {
-    display: flex;
-    justify-content: space-around;
-    list-style-type: none;
+
+.content-body {
+    margin: 5px;
 }
 
-nav a {
-    color: white;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    transition: all 0.3s ease;
-}
-
-nav a:hover {
-    background-color: #555;
-    border-radius: 4px;
-}
 /* Centered login container */
 .login-container {
     background: rgba(120, 114, 114, 0.1);
@@ -106,6 +92,7 @@ nav a:hover {
     transform: translate(130%, 40%);
     width: 340px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    color: #FAFFFD;
 }
 
 /* Input fields */
@@ -119,7 +106,7 @@ nav a:hover {
     border: none;
     background: rgba(255, 255, 255, 0.2);
     border-radius: 5px;
-    color: #fff;
+    color: #FAFFFD;
     font-size: 16px;
     outline: none;
 }
@@ -130,34 +117,32 @@ nav a:hover {
 
 /* General styling for buttons */
 .button {
-    display: inline-block;
     width: 150px;
-    padding: 12px;
     border: none;
     border-radius: 25px;
-    margin-top: 5px;
-    background: #3a3838;
-    color: #fff;
+    margin-top: 25px;
+    color: #FAFFFD;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s ease-in-out;
 }
+
 button {
     width: 150px;
-    padding: 12px;
     border: none;
     border-radius: 25px;
-    margin-top: 10px;
-    background: #3a3838;
-    color: #fff;
+    margin-top: 25px;
+    color: #FAFFFD;
+    background-color: #7D83FF;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s ease-in-out;
 }
+
 button:hover {
     background: rgba(255, 255, 255, 0.4);
 }
@@ -172,19 +157,26 @@ button:hover {
     display: flex;
     gap: 15px;
 }
-
+button a {
+    text-decoration: none;
+    color: inherit;
+}
 .button-group {
     width: 25%;
     padding: 12px;
     border: none;
-    margin-top: 10px;
+    margin-top: 25px;
     background: rgba(255, 255, 255, 0.2);
-    color: #fff;
+    color: #FAFFFD;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s ease-in-out;
+}
+
+.template-name {
+    color: #FAFFFD;
 }
 
 /* Formatting Differences Section */
@@ -196,18 +188,20 @@ button:hover {
     padding: 20px;
     border-radius: 10px;
 }
-
+.form-group{
+    margin-bottom: 15px;
+}
 .original, .formatted {
     width: 48%;
     border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 15px;
     border-radius: 5px;
     background-color: rgba(0, 0, 0, 0.2);
-    color: #fff;
+    color: #FAFFFD;
 }
 
 .original h4, .formatted h4 {
-    color: #fff;
+    color: #FAFFFD;
     margin-bottom: 10px;
     text-align: center;
 }
