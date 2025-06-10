@@ -5,83 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compliance Results</title>
     <link rel="stylesheet" href="/static/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        /* Additional styles for formatting comparison */
-        .comparison-container {
-            display: flex;
-            gap: 20px;
-            margin: 20px 0;
-        }
-        
-        .formatting-column {
-            flex: 1;
-            border: 1px solid #e1e1e1;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .formatting-header {
-            background-color: #f5f5f5;
-            padding: 10px 15px;
-            border-bottom: 1px solid #e1e1e1;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-        }
-        
-        .template-header {
-            background-color: #e3f2fd;
-        }
-        
-        .student-header {
-            background-color: #fff8e1;
-        }
-        
-        .formatting-content {
-            padding: 15px;
-            background-color: white;
-            font-family: 'Courier New', monospace;
-            white-space: pre-wrap;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        
-        .diff-highlight {
-            background-color: #fffde7;
-            border-left: 3px solid #ffd54f;
-            padding-left: 5px;
-            margin-left: -5px;
-        }
-        
-        .score {
-            font-weight: bold;
-            font-size: 1.2em;
-        }
-        
-        .button-group {
-            margin-top: 30px;
-        }
-        
-        .btn {
-            padding: 10px 20px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary {
-            background-color: #4285f4;
-            color: white;
-            border: 1px solid #4285f4;
-        }
-        
-        .btn-primary:hover {
-            background-color: #3367d6;
-        }
-    </style>
+    
 </head>
 <body>
      <!-- Navigation Bar -->
@@ -110,7 +34,6 @@
                 {% endwith %}
             </div>
 
-            <!-- Compliance Score Display -->
             <p><strong>Score:</strong> <span id="score" class="score">{{ (compliance_result.final_compliance_score * 100) | round(1) }}%</span></p>
 
             <!-- Recommendations -->
@@ -124,41 +47,21 @@
             <!-- Formatting Differences -->
             {% if compliance_result.formatting_differences %}
             <h3>Formatting Differences:</h3>
-            <div class="comparison-container">
-                <div class="formatting-column">
-                    <div class="formatting-header template-header">
-                        <i class="fas fa-file-alt" style="margin-right: 8px;"></i>
-                        Template Formatting
-                    </div>
-                    <div class="formatting-content">
-                        {{ compliance_result.formatting_differences.original }}
-                    </div>
+              <div class="formatting-differences" style="border: 1px solid #ccc; font-family: monospace; padding: 10px; border-radius: 3px;">
+                <div class="original">
+                    <h4>Template Formatting</h4>
+                    <pre>{{ compliance_result.formatting_differences.original }}</pre>
                 </div>
-                
-                <div class="formatting-column">
-                    <div class="formatting-header student-header">
-                        <i class="fas fa-user-graduate" style="margin-right: 8px;"></i>
-                        Your Formatting
-                    </div>
-                    <div class="formatting-content">
-                        {% set original_lines = compliance_result.formatting_differences.original.split('\n') %}
-                        {% set student_lines = compliance_result.formatting_differences.formatted.split('\n') %}
-                        
-                        {% for i in range(student_lines|length) %}
-                            {% if i < original_lines|length and original_lines[i] != student_lines[i] %}
-                                <div class="diff-highlight">{{ student_lines[i] }}</div>
-                            {% else %}
-                                {{ student_lines[i] }}<br>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
+                <div class="formatted">
+                    <h4>Student Formatting</h4>
+                    <pre>{{ compliance_result.formatting_differences.formatted }}</pre>
                 </div>
             </div>
             {% endif %}
 
             <!-- Buttons -->
             <div class="button-group">
-                <a href="/upload" class="btn btn-primary">Try Another Document</a>
+                <a href="/upload" class="btn btn-primary">Try Again</a>
             </div>
         </div>
     </section>
@@ -170,26 +73,15 @@
 
             // Apply color based on score
             if (score >= 80) {
-                scoreElement.style.color = "#4CAF50";
-                scoreElement.innerHTML = score + "% <i class='fas fa-check-circle'></i>";
+                scoreElement.style.color = "green";
             } else if (score >= 50) {
-                scoreElement.style.color = "#FFC107";
-                scoreElement.innerHTML = score + "% <i class='fas fa-exclamation-circle'></i>";
+                scoreElement.style.color = "orange";
             } else {
-                scoreElement.style.color = "#F44336";
-                scoreElement.innerHTML = score + "% <i class='fas fa-times-circle'></i>";
+                scoreElement.style.color = "red";
             }
 
-            // Add line numbers to formatting content
-            document.querySelectorAll('.formatting-content').forEach(content => {
-                const lines = content.innerHTML.split('<br>');
-                let numberedContent = '';
-                lines.forEach((line, index) => {
-                    numberedContent += `<span style="color: #999; margin-right: 10px;">${index + 1}</span> ${line}<br>`;
-                });
-                content.innerHTML = numberedContent;
-            });
         });
+        
     </script>
 </body>
 </html>
