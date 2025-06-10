@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compliance Results</title>
     <link rel="stylesheet" href="/static/styles.css">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
      <!-- Navigation Bar -->
@@ -34,7 +34,8 @@
                 {% endwith %}
             </div>
 
-            <p><strong>Score:</strong> <span id="score" class="score">{{ (compliance_result.final_compliance_score * 100) | round(1) }}%</span></p>
+            <!-- Compliance Score Display -->
+<p><strong>Score:</strong> <span id="score" class="score">{{ (compliance_result.final_compliance_score * 100) | round(1) }}%</span></p>
 
             <!-- Recommendations -->
             <h3>Recommendations:</h3>
@@ -47,7 +48,7 @@
             <!-- Formatting Differences -->
             {% if compliance_result.formatting_differences %}
             <h3>Formatting Differences:</h3>
-              <div class="formatting-differences" style="border: 1px solid #ccc; font-family: monospace; padding: 10px; border-radius: 3px;">
+            <div class="formatting-differences">
                 <div class="original">
                     <h4>Template Formatting</h4>
                     <pre>{{ compliance_result.formatting_differences.original }}</pre>
