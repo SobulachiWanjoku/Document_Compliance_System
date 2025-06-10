@@ -209,10 +209,33 @@ def upload_file():
                 flash("An error occurred during compliance evaluation. Please try again.", "error")
                 return redirect(url_for('upload_file'))
 
-            # Pass formatting differences as text for display
+            # Map alignment integer keys to human-readable strings
+            alignment_map = {
+                0: 'Left',
+                1: 'Center',
+                2: 'Right',
+                3: 'Justify'
+            }
+
+            def map_alignments(formatting_dict):
+                if 'alignments' in formatting_dict:
+                    mapped = {}
+                    for key, value in formatting_dict['alignments'].items():
+                        try:
+                            int_key = int(key)
+                            mapped[alignment_map.get(int_key, f'Unknown({key})')] = value
+                        except Exception:
+                            mapped[key] = value
+                    formatting_dict['alignments'] = mapped
+                return formatting_dict
+
+            template_formatting = map_alignments(template_formatting)
+            student_formatting = map_alignments(student_formatting)
+
+            # Pass formatting differences as dictionaries for better rendering
             formatting_differences = {
-                'original': str(template_formatting),
-                'formatted': str(student_formatting)
+                'original': template_formatting,
+                'formatted': student_formatting
             }
 
             return render_template('result.html', compliance_result={

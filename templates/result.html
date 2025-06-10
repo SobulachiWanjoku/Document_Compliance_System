@@ -48,14 +48,58 @@
             <!-- Formatting Differences -->
             {% if compliance_result.formatting_differences %}
             <h3>Formatting Differences:</h3>
-            <div class="formatting-differences">
-                <div class="original">
+            <div class="formatting-differences" style="display: flex; gap: 2rem;">
+                <div class="original" style="flex: 1;">
                     <h4>Template Formatting</h4>
-                    <pre>{{ compliance_result.formatting_differences.original }}</pre>
+                    <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr><th>Attribute</th><th>Details</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for key, value in compliance_result.formatting_differences.original.items() %}
+                                <tr>
+                                    <td>{{ key }}</td>
+                                    <td>
+                                        {% if value is mapping %}
+                                            <ul>
+                                            {% for subkey, subval in value.items() %}
+                                                <li>{{ subkey }}: {{ subval }}</li>
+                                            {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            {{ value }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
-                <div class="formatted">
+                <div class="formatted" style="flex: 1;">
                     <h4>Student Formatting</h4>
-                    <pre>{{ compliance_result.formatting_differences.formatted }}</pre>
+                    <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr><th>Attribute</th><th>Details</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for key, value in compliance_result.formatting_differences.formatted.items() %}
+                                <tr>
+                                    <td>{{ key }}</td>
+                                    <td>
+                                        {% if value is mapping %}
+                                            <ul>
+                                            {% for subkey, subval in value.items() %}
+                                                <li>{{ subkey }}: {{ subval }}</li>
+                                            {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            {{ value }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
             {% endif %}
