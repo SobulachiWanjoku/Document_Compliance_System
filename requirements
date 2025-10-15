@@ -1,5 +1,8 @@
 Flask
 Flask-WTF
+flask_login
+flask_sqlalchemy
+PyPDF2
 pytesseract
 opencv-python
 numpy
@@ -7,3 +10,4 @@ scikit-learn
 joblib
 pandas
 nltk
+python-docx

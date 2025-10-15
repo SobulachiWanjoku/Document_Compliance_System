@@ -5,3 +5,62 @@
 2025-06-16 13:46:03,102 WARNING: Favicon not found: /favicon.ico [in C:\Users\USER\Documents\Document_Compliance_System\app.py:427]
 2025-06-16 13:47:16,891 WARNING: Favicon not found: /favicon.ico [in C:\Users\USER\Documents\Document_Compliance_System\app.py:427]
 2025-06-16 13:47:19,074 WARNING: Favicon not found: /favicon.ico [in C:\Users\USER\Documents\Document_Compliance_System\app.py:427]
+2025-10-14 18:24:08,471 INFO: Application startup [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:42]
+2025-10-14 18:24:11,810 INFO: Application startup [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:42]
+2025-10-14 18:24:18,967 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-14 18:24:30,335 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-14 18:24:33,042 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-14 18:24:33,921 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-14 18:24:35,335 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-14 18:24:36,792 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-14 18:24:38,356 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-14 18:24:41,648 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-14 18:26:14,501 ERROR: User: 1 - An error occurred during file upload: 
+**********************************************************************
+  Resource [93mpunkt_tab[0m not found.
+  Please use the NLTK Downloader to obtain the resource:
+
+  [31m>>> import nltk
+  >>> nltk.download('punkt_tab')
+  [0m
+  For more information see: https://www.nltk.org/data.html
+
+  Attempted to load [93mtokenizers/punkt_tab/english/[0m
+
+  Searched in:
+    - 'C:\\Users\\Sub/nltk_data'
+    - 'C:\\Users\\Sub\\AppData\\Local\\Programs\\Python\\Python39\\nltk_data'
+    - 'C:\\Users\\Sub\\AppData\\Local\\Programs\\Python\\Python39\\share\\nltk_data'
+    - 'C:\\Users\\Sub\\AppData\\Local\\Programs\\Python\\Python39\\lib\\nltk_data'
+    - 'C:\\Users\\Sub\\AppData\\Roaming\\nltk_data'
+    - 'C:\\nltk_data'
+    - 'D:\\nltk_data'
+    - 'E:\\nltk_data'
+**********************************************************************
+ - Template file: N/A, Student file: Three major cyber attacks(Sobulachi Wanjoku).docx, Request: POST /upload [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:249]
+2025-10-14 18:26:14,597 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-14 18:26:51,092 INFO: Saving template path: uploads\DespicablePower_System.docx [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:127]
+2025-10-14 18:26:51,195 ERROR: User: 1 - An error occurred during file upload: 
+**********************************************************************
+  Resource [93mpunkt_tab[0m not found.
+  Please use the NLTK Downloader to obtain the resource:
+
+  [31m>>> import nltk
+  >>> nltk.download('punkt_tab')
+  [0m
+  For more information see: https://www.nltk.org/data.html
+
+  Attempted to load [93mtokenizers/punkt_tab/english/[0m
+
+  Searched in:
+    - 'C:\\Users\\Sub/nltk_data'
+    - 'C:\\Users\\Sub\\AppData\\Local\\Programs\\Python\\Python39\\nltk_data'
+    - 'C:\\Users\\Sub\\AppData\\Local\\Programs\\Python\\Python39\\share\\nltk_data'
+    - 'C:\\Users\\Sub\\AppData\\Local\\Programs\\Python\\Python39\\lib\\nltk_data'
+    - 'C:\\Users\\Sub\\AppData\\Roaming\\nltk_data'
+    - 'C:\\nltk_data'
+    - 'D:\\nltk_data'
+    - 'E:\\nltk_data'
+**********************************************************************
+ - Template file: Despicable(Power System).docx, Student file: Despicable(Power System).docx, Request: POST /upload [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:249]
+2025-10-14 18:26:51,296 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
