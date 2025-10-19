@@ -11,6 +11,10 @@ scikit-learn
 joblib
 pandas
 nltk
+punkt
+punkt_tab
+stopwords
+wordnet
 python-docx
 gunicorn
 waitress
