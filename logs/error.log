@@ -1,21 +1,9 @@
-2025-06-16 13:41:11,480 WARNING: Favicon not found: /favicon.ico [in C:\Users\USER\Documents\Document_Compliance_System\app.py:427]
-2025-06-16 13:45:42,153 WARNING: Favicon not found: /favicon.ico [in C:\Users\USER\Documents\Document_Compliance_System\app.py:427]
-2025-06-16 13:45:47,909 WARNING: Favicon not found: /favicon.ico [in C:\Users\USER\Documents\Document_Compliance_System\app.py:427]
-2025-06-16 13:45:49,338 WARNING: Favicon not found: /favicon.ico [in C:\Users\USER\Documents\Document_Compliance_System\app.py:427]
-2025-06-16 13:46:03,102 WARNING: Favicon not found: /favicon.ico [in C:\Users\USER\Documents\Document_Compliance_System\app.py:427]
-2025-06-16 13:47:16,891 WARNING: Favicon not found: /favicon.ico [in C:\Users\USER\Documents\Document_Compliance_System\app.py:427]
-2025-06-16 13:47:19,074 WARNING: Favicon not found: /favicon.ico [in C:\Users\USER\Documents\Document_Compliance_System\app.py:427]
-2025-10-14 18:24:08,471 INFO: Application startup [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:42]
-2025-10-14 18:24:11,810 INFO: Application startup [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:42]
-2025-10-14 18:24:18,967 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-14 18:24:30,335 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-14 18:24:33,042 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-14 18:24:33,921 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-14 18:24:35,335 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-14 18:24:36,792 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-14 18:24:38,356 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-14 18:24:41,648 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-14 18:26:14,501 ERROR: User: 1 - An error occurred during file upload: 
+2025-10-18 22:17:35,938 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:17:49,026 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:17:50,734 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:17:52,338 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:17:55,499 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:18:06,115 ERROR: User: 1 - An error occurred during file upload: 
 **********************************************************************
   Resource [93mpunkt_tab[0m not found.
   Please use the NLTK Downloader to obtain the resource:
@@ -37,46 +25,14 @@
     - 'D:\\nltk_data'
     - 'E:\\nltk_data'
 **********************************************************************
- - Template file: N/A, Student file: Three major cyber attacks(Sobulachi Wanjoku).docx, Request: POST /upload [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:249]
-2025-10-14 18:26:14,597 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-14 18:26:51,092 INFO: Saving template path: uploads\DespicablePower_System.docx [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:127]
-2025-10-14 18:26:51,195 ERROR: User: 1 - An error occurred during file upload: 
-**********************************************************************
-  Resource [93mpunkt_tab[0m not found.
-  Please use the NLTK Downloader to obtain the resource:
-
-  [31m>>> import nltk
-  >>> nltk.download('punkt_tab')
-  [0m
-  For more information see: https://www.nltk.org/data.html
-
-  Attempted to load [93mtokenizers/punkt_tab/english/[0m
-
-  Searched in:
-    - 'C:\\Users\\Sub/nltk_data'
-    - 'C:\\Users\\Sub\\AppData\\Local\\Programs\\Python\\Python39\\nltk_data'
-    - 'C:\\Users\\Sub\\AppData\\Local\\Programs\\Python\\Python39\\share\\nltk_data'
-    - 'C:\\Users\\Sub\\AppData\\Local\\Programs\\Python\\Python39\\lib\\nltk_data'
-    - 'C:\\Users\\Sub\\AppData\\Roaming\\nltk_data'
-    - 'C:\\nltk_data'
-    - 'D:\\nltk_data'
-    - 'E:\\nltk_data'
-**********************************************************************
- - Template file: Despicable(Power System).docx, Student file: Despicable(Power System).docx, Request: POST /upload [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:249]
-2025-10-14 18:26:51,296 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-18 20:43:33,521 INFO: Application startup [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:42]
-2025-10-18 20:43:57,537 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-18 20:44:05,462 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-18 20:44:10,952 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-18 21:31:18,460 INFO: Application startup [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:42]
-2025-10-18 21:31:18,517 INFO: Running on Waitress (Windows) at http://0.0.0.0:8000 [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:442]
-2025-10-18 21:50:25,745 INFO: Application startup [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:42]
-2025-10-18 21:50:39,375 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-18 21:50:51,725 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-18 21:51:00,458 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-18 21:51:02,091 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-18 21:51:25,247 INFO: Saving template path: uploads\Development_of_a_Finance_management_System_project_proposal.docx [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:127]
-2025-10-18 21:51:25,854 ERROR: User: 1 - An error occurred during file upload: 
+ - Template file: N/A, Student file: Development of a Finance management System project proposal.docx, Request: POST /upload [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:249]
+2025-10-18 22:18:06,209 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:27:03,497 INFO: Application startup [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:42]
+2025-10-18 22:27:22,561 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:27:29,631 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:27:31,953 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:27:51,053 INFO: Saving template path: uploads\Development_of_a_Finance_management_System_project_proposal.docx [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:127]
+2025-10-18 22:27:51,512 ERROR: User: 1 - An error occurred during file upload: 
 **********************************************************************
   Resource [93mpunkt_tab[0m not found.
   Please use the NLTK Downloader to obtain the resource:
@@ -99,13 +55,13 @@
     - 'E:\\nltk_data'
 **********************************************************************
  - Template file: Development of a Finance management System project proposal.docx, Student file: Development of a Finance management System project proposal.docx, Request: POST /upload [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:249]
-2025-10-18 21:51:25,955 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-18 22:14:27,435 INFO: Application startup [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:42]
-2025-10-18 22:15:08,431 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-18 22:15:18,347 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-18 22:15:20,003 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
-2025-10-18 22:15:39,972 INFO: Saving template path: uploads\Development_of_a_Finance_management_System_project_proposal.docx [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:127]
-2025-10-18 22:15:40,496 ERROR: User: 1 - An error occurred during file upload: 
+2025-10-18 22:27:51,588 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:42:38,075 INFO: Application startup [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:42]
+2025-10-18 22:42:46,047 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:42:57,644 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:42:59,281 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:43:16,568 INFO: Saving template path: uploads\Development_of_a_Finance_management_System_project_proposal.docx [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:127]
+2025-10-18 22:43:17,105 ERROR: User: 1 - An error occurred during file upload: 
 **********************************************************************
   Resource [93mpunkt_tab[0m not found.
   Please use the NLTK Downloader to obtain the resource:
@@ -128,4 +84,4 @@
     - 'E:\\nltk_data'
 **********************************************************************
  - Template file: Development of a Finance management System project proposal.docx, Student file: Development of a Finance management System project proposal.docx, Request: POST /upload [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:249]
-2025-10-18 22:15:40,589 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:43:17,198 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
