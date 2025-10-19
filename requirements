@@ -11,3 +11,5 @@ joblib
 pandas
 nltk
 python-docx
+gunicorn
+waitress

@@ -429,5 +429,22 @@ def not_found_error(error):
     return render_template('error.html', message="Page not found."), 404
 
 if __name__ == '__main__':
+    import platform
+    from waitress import serve
+
     with app.app_context():
-        app.run(debug=True)
+        system_name = platform.system()
+        host = "0.0.0.0"
+        port = 8000
+
+        if system_name == "Windows":
+            # Use Waitress (works on Windows)
+            app.logger.info(f"Running on Waitress (Windows) at http://{host}:{port}")
+            print(f"🚀 Running on Waitress (Windows) at http://{host}:{port}")
+            serve(app, host=host, port=port)
+        else:
+            # Use Gunicorn (Linux/Mac)
+            app.logger.info(f"Running on Gunicorn-compatible system: {system_name}")
+            print(f"🚀 Running on Gunicorn-compatible system: {system_name}")
+            from gunicorn.app.wsgiapp import run
+            run()

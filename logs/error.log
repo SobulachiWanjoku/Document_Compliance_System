@@ -64,3 +64,7 @@
 **********************************************************************
  - Template file: Despicable(Power System).docx, Student file: Despicable(Power System).docx, Request: POST /upload [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:249]
 2025-10-14 18:26:51,296 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 20:43:33,521 INFO: Application startup [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:42]
+2025-10-18 20:43:57,537 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 20:44:05,462 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 20:44:10,952 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
