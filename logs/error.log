@@ -68,3 +68,5 @@
 2025-10-18 20:43:57,537 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
 2025-10-18 20:44:05,462 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
 2025-10-18 20:44:10,952 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 21:31:18,460 INFO: Application startup [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:42]
+2025-10-18 21:31:18,517 INFO: Running on Waitress (Windows) at http://0.0.0.0:8000 [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:442]
