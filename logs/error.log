@@ -85,3 +85,37 @@
 **********************************************************************
  - Template file: Development of a Finance management System project proposal.docx, Student file: Development of a Finance management System project proposal.docx, Request: POST /upload [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:249]
 2025-10-18 22:43:17,198 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:45:10,807 INFO: Application startup [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:42]
+2025-10-18 22:45:17,233 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:45:26,017 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:45:27,230 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:45:46,047 INFO: Saving template path: uploads\Development_of_a_Finance_management_System_project_proposal.docx [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:127]
+2025-10-18 22:45:46,501 ERROR: User: 1 - An error occurred during file upload: 
+**********************************************************************
+  Resource [93mpunkt_tab[0m not found.
+  Please use the NLTK Downloader to obtain the resource:
+
+  [31m>>> import nltk
+  >>> nltk.download('punkt_tab')
+  [0m
+  For more information see: https://www.nltk.org/data.html
+
+  Attempted to load [93mtokenizers/punkt_tab/english/[0m
+
+  Searched in:
+    - 'C:\\Users\\Sub/nltk_data'
+    - 'C:\\Users\\Sub\\AppData\\Local\\Programs\\Python\\Python39\\nltk_data'
+    - 'C:\\Users\\Sub\\AppData\\Local\\Programs\\Python\\Python39\\share\\nltk_data'
+    - 'C:\\Users\\Sub\\AppData\\Local\\Programs\\Python\\Python39\\lib\\nltk_data'
+    - 'C:\\Users\\Sub\\AppData\\Roaming\\nltk_data'
+    - 'C:\\nltk_data'
+    - 'D:\\nltk_data'
+    - 'E:\\nltk_data'
+**********************************************************************
+ - Template file: Development of a Finance management System project proposal.docx, Student file: Development of a Finance management System project proposal.docx, Request: POST /upload [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:249]
+2025-10-18 22:45:46,580 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:51:28,850 INFO: Application startup [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:42]
+2025-10-18 22:51:44,591 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:51:48,484 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
+2025-10-18 22:52:06,551 INFO: Saving template path: uploads\Development_of_a_Finance_management_System_project_proposal.docx [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:127]
+2025-10-18 22:52:10,740 WARNING: Favicon not found: /favicon.ico [in C:\Users\Sub\Documents\GitHub\Document_Compliance_System\app.py:427]
