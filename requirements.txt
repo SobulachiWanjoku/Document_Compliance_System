@@ -1,5 +1,6 @@
 Flask
 Flask-WTF
+Flask-Migrate
 flask_login
 flask_sqlalchemy
 PyPDF2
